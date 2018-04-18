@@ -31,3 +31,27 @@ Click on user icon
 Click on settings
 
 <img src="milestone2Pictures/proto1-7.jpg" width="60%">
+
+Prototype #2:
+This prototype focuses on having most of the content appear on the singular main page. So instead of going to separate pages the page will simply load more content extending the page. 
+
+Home page
+<img src="milestone2Pictures/proto2-1.jpg">
+
+Hover over one of the sectors of the home page pie chart revealing a brief summary of info.
+<img src="milestone2Pictures/proto2-2.jpg">
+
+Click on one of the sectors of the pie chart and it will extend the page with a more detailed display and analysis of the chosen category. 
+<img src="milestone2Pictures/proto2-3.jpg">
+
+Hover over one of the specific sectors of the pie chart to reveal even more detailed information.
+<img src="milestone2Pictures/proto2-4.jpg">
+
+Click on account to access the settings page (need to rename account button to settings)
+<img src="milestone2Pictures/proto2-5.jpg">
+
+Settings page with dropdowns for tracking, alerts, deleting ones account and a log out button.
+<img src="milestone2Pictures/proto2-6.jpg">
+
+Click on one of the dropdowns to get the detailed information of that specific setting
+<img src="milestone2Pictures/proto2-7.jpg">
