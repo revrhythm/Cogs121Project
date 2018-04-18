@@ -4,7 +4,7 @@ Storyboard #1
 
 Storyboard #2
 
-<img src="milestone2Pictures/story2.png" width="80%">
+<img src="milestone2Pictures/story2.png" width="100%">
 
 Prototype #1:
 Home Page
