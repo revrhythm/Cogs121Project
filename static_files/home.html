@@ -47,12 +47,12 @@
     <script>
         console.log("hello");
 
-        const requestURL = 'users/' + $('john').val();
+        const requestURL = 'users/' + localStorage.getItem("username");
         console.log('making ajax request to:', requestURL);
 
         $.ajax({
             // all URLs are relative to http://localhost:3000/
-            url: 'users/john',
+            url: requestURL,
             type: 'GET',
             dataType: 'json',
             success: (data) => {
