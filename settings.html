@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Settings</title>
+  <!-- Bootstrap CSS-->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color: lightgrey">
+  <h1 style="text-align: center">Settings</h1>
+  <div class="container mx-auto" style="width: 500px">
+    
+    <br>
+    
+    <div id="accordion">
+  		<div class="card">
+    		<div class="card-header" id="headingOne">
+      			<h5 class="mb-0">
+        			<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          				Tracking
+        			</button>
+      			</h5>
+    		</div>
+
+    		<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+      			<div class="card-body">
+        			Tracking settings
+      			</div>
+    		</div>
+  		</div>
+      
+  		<div class="card">
+    		<div class="card-header" id="headingTwo">
+      			<h5 class="mb-0">
+        			<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          				Alerts
+        			</button>
+      			</h5>
+    		</div>
+          
+    		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+      			<div class="card-body">
+        			Alerts settings
+      			</div>
+    		</div>
+  		</div>
+  		<div class="card">
+    		<div class="card-header" id="headingThree">
+      			<h5 class="mb-0">
+        			<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          				Account
+        			</button>
+      			</h5>
+    		</div>
+          
+    		<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+    			<div class="card-body">
+       				Account Settings
+      			</div>
+    		</div>
+ 		</div>
+	</div>
+    
+    <div style="text-align: center;">
+      	<br><br>
+    	<button type="logout" class="btn btn-primary" >Log Out</button>
+    </div>
+</div>
+
+
+
+</body>
+</html>
