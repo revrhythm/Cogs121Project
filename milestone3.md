@@ -9,10 +9,12 @@ Our homepage is the same as how we invisioned it in the protoypes.
 At this stage, hovering over the pie chart does not display the specific 
 websites, but it does detail how much time a person has spent for each
 category.
+
 <img src="milestone3Pictures/m3-3.PNG" width="60%">
 
 We have pages for the various categories, but we have not implemented
 the data charts at this time.
+
 <img src="milestone3Pictures/m3-4.PNG" width="60%">
 
 Our account menu has the same layout as in prototype 1.
