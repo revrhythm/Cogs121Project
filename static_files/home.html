@@ -24,6 +24,19 @@
 
 <body>
     <h1> Today's Websites Usage</h1>
+    <div class="container">
+        <div class="row">
+            <form action="#">
+                Pick up a date:
+                <input type="date" name="bday">
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+
+    <!-- Insert coresponding data here -->
+    <div id="selected-data"></div>
+
     <div class="useraccount">
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
@@ -44,6 +57,8 @@
     <div class="datacontent">
         <canvas id="pieChart"></canvas>
     </div>
+
+
     <script>
         console.log("hello");
 
