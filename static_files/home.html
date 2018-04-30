@@ -18,6 +18,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script src="jquery-3.3.1.min.js"></script>
 </head>
@@ -26,11 +27,21 @@
     <h1> Today's Websites Usage</h1>
     <div class="container">
         <div class="row">
-            <form action="#">
+
                 Pick up a date:
-                <input type="date" name="bday">
-                <input type="submit">
-            </form>
+                <input type="date" name="bday" id="date">
+                <button id="submit">submit</button>
+
+                <script>
+                 $(document).ready(function(){
+                     console.log("yoyoyoyo");
+                     $("#submit").click(function(){
+                         console.log("lolololo");
+                         console.log($("#date").val());
+                     });
+                 });
+
+                </script>
         </div>
     </div>
 
@@ -55,67 +66,104 @@
     </div>
 
     <div class="datacontent">
+
+        <div id="timeline" style="height: 300px;"></div>
         <canvas id="pieChart"></canvas>
     </div>
 
 
+
+    <script type="text/javascript">
+     google.charts.load('current', {'packages':['timeline']});
+     google.charts.setOnLoadCallback(drawChart);
+     function drawChart() {
+         var container = document.getElementById('timeline');
+         var chart = new google.visualization.Timeline(container);
+         var dataTable = new google.visualization.DataTable();
+
+         dataTable.addColumn({ type: 'string', id: 'President' });
+         dataTable.addColumn({ type: 'string', id: 'Text' });
+         dataTable.addColumn({ type: 'date', id: 'Start' });
+         dataTable.addColumn({ type: 'date', id: 'End' });
+
+         dataTable.addRows([
+             [ 'Facebook', '', new Date(0,0,0,12,0,0),  new Date(0,0,0,13,30,0) ],
+             [ 'Facebook', '', new Date(0,0,0,14,0,0),  new Date(0,0,0,15,30,0) ],
+             [ 'Google',  '', new Date(0,0,0,16,45,0),  new Date(0,0,0,17,30,0) ],
+             [ 'Amazon',  '', new Date(0,0,0,13,30,0), new Date(0,0,0,14,0,0) ],
+             [ 'Amazon',  '', new Date(0,0,0,15,30,0), new Date(0,0,0,16,45,0) ],
+             [ 'Triton Ed', '', new Date(0,0,0,17,30,0), new Date(0,0,0,18,0,0) ],
+             [ 'Calendar Tasks', 'Study Time', new Date(0,0,0,12,0,0), new Date(0,0,0,14,0,0)],
+             [ 'Calendar Tasks', 'Cram Time', new Date(0,0,0,16,0,0), new Date(0,0,0,18,0,0)]]);
+
+         var options = {
+             allowHTML: true,
+             timeline: { colorByRowLabel: true },
+             'width':  1000,
+             'height': 1000,
+         };
+
+         chart.draw(dataTable);
+     }
+    </script>
+
     <script>
-        console.log("hello");
+     console.log("hello");
 
-        const requestURL = 'users/' + localStorage.getItem("username");
-        console.log('making ajax request to:', requestURL);
+     const requestURL = 'users/' + localStorage.getItem("username");
+     console.log('making ajax request to:', requestURL);
 
-        $.ajax({
-            // all URLs are relative to http://localhost:3000/
-            url: requestURL,
-            type: 'GET',
-            dataType: 'json',
-            success: (data) => {
-                console.log('You received some data!', data);
-                $('#socialMed').html('Total Social Media: ' + data.socialMedia);
-                $('#onlineT').html('Total Online TV: ' + data.onlineTV);
-                $('#edu').html('Total Education: ' + data.education);
-                $('#oth').html('Total Other: ' + data.other);
+     $.ajax({
+         // all URLs are relative to http://localhost:3000/
+         url: requestURL,
+         type: 'GET',
+         dataType: 'json',
+         success: (data) => {
+             console.log('You received some data!', data);
+             $('#socialMed').html('Total Social Media: ' + data.socialMedia);
+             $('#onlineT').html('Total Online TV: ' + data.onlineTV);
+             $('#edu').html('Total Education: ' + data.education);
+             $('#oth').html('Total Other: ' + data.other);
 
-            },
-        }); //ajax match
+         },
+     }); //ajax match
 
-        //pie
-        var ctxP = document.getElementById("pieChart").getContext('2d');
-        var myPieChart = new Chart(ctxP, {
-            type: 'pie',
-            data: {
-                labels: ["Social Media", "Online TV", "Education", "Other"],
-                datasets: [{
-                    data: [300, 100, 40, 120],
-                    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-                    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
+     //pie
+     var ctxP = document.getElementById("pieChart").getContext('2d');
+     var myPieChart = new Chart(ctxP, {
+         type: 'pie',
+         data: {
+             labels: ["Social Media", "Online TV", "Education", "Other"],
+             datasets: [{
+                 data: [300, 100, 40, 120],
+                 backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+                 hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
 
-        $("#pieChart").click(
-            function (evt) {
-                var activePoints = myPieChart.getElementsAtEvent(evt);
-                clickindex = activePoints[0]["_index"];
+     $("#pieChart").click(
+         function (evt) {
+             var activePoints = myPieChart.getElementsAtEvent(evt);
+             clickindex = activePoints[0]["_index"];
 
-                if (clickindex == 0) {
-                    location.href = "socialmedia.html";
-                } else if (clickindex == 1) {
-                    location.href = "onlinetv.html";
-                } else if (clickindex == 2) {
-                    location.href = "education.html";
-                } else if (clickindex == 3) {
-                    location.href = "other.html";
-                }
+             if (clickindex == 0) {
+                 location.href = "socialmedia.html";
+             } else if (clickindex == 1) {
+                 location.href = "onlinetv.html";
+             } else if (clickindex == 2) {
+                 location.href = "education.html";
+             } else if (clickindex == 3) {
+                 location.href = "other.html";
+             }
 
-                //var url = "http://example.com/?label=" + activePoints[0].label + "&value=" + activePoints[0].value;
-                //alert(url);
-            }
-        );
+             //var url = "http://example.com/?label=" + activePoints[0].label + "&value=" + activePoints[0].value;
+             //alert(url);
+         }
+     );
     </script>
 
     <div id="socialMed"></div>
