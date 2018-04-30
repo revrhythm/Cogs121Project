@@ -1,6 +1,8 @@
 Milestone 4
 
 While in the mileston3, we were only able to display the chart of a static data, now, we can display the data depending on the user’s selection of date. Moreover, we added a graph of showing the timeline of user's web usage to visually indicate if users got distrupted during the "study time" or not.
+<img src="milestone4Pictures/home1.png" width="60%">
+<img src="milestone4Pictures/home2.png" width="60%">
 
 
 User Privacy Issue:
