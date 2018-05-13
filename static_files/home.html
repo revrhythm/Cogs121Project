@@ -21,200 +21,183 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script src="jquery-3.3.1.min.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(() => {
-            $('#readButton').click(() => {
-                const requestURL = 'website/' + $('#nameBox').val();
-                console.log('making ajax request to:', requestURL);
-
-                // From: http://learn.jquery.com/ajax/jquery-ajax-methods/
-                $.ajax({
-                    // all URLs are relative to http://localhost:3000/
-                    url: requestURL,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: (data) => {
-                        console.log('You received some data!', data);
-                            $('#status').html('Successfully fetched data at URL: ' + requestURL);
-                            $('#timeStart').html('Time Started: ' + data.timeStart);
-                            $('#timeEnd').html('Time End: ' + data.timeEnd);
-                            $('#duration').html('Duration: ' + data.duration);
-                    },
-                });
-            });
-
-            // http://api.jquery.com/ajaxerror/
-            $(document).ajaxError(() => {
-                $('#status').html('Error: unknown ajaxError!');
-            });
-        });
-    </script>
+    <script src="js/home.js"></script>
+    <script src="js/data.js"></script>
 </head>
 
 <body>
-    <h1> Today's Websites Usage</h1>
+<h1> Today's Websites Usage</h1>
 
-     Website to Look Up:
-    <input id="nameBox" type="text" size="20" />
-    <button id="readButton">Get Recent Info</button>
-    
-    <div id="timeStart"></div>
-    <div id="timeEnd"></div>
-    <div id="duration"></div>
+ Website to Look Up:
+  <input id="nameBox" type="text" size="20" />
+  <button id="readButton">Get Website Stats</button>
+  <button id="allSitesButton">View All Sites</button>
+  <button id="sortTimeButton">Sort Sites by Time</button>
+  <button id="sortNameButton">Sort Sites by Name</button>
 
-    <!--where is the output
-    <div class="container">
-        <div class="row">
 
-                Pick up a date:
-                <input type="date" name="bday" id="date">
-                <button id="submit">submit</button>
+  <div class="datacontent">
 
-                <script>
-                 $(document).ready(function(){
-                     console.log("yoyoyoyo");
-                     $("#submit").click(function(){
-                         console.log("lolololo");
-                         console.log($("#date").val());
-                     });
+    <div id="timeline" class="graph" style="height: 500px; width: 100%"></div>
+    <!-- <canvas id="pieChart"></canvas> -->
+  </div>
+  <div id="timeStart"></div>
+  <div id="timeEnd"></div>
+  <div id="duration"></div>
+
+  <div id="calendar">
+    Enter Date:
+    <input id="dateBox" type="date">
+    <input id="dateButton" type="submit">
+  </div>
+
+<!--where is the output
+<div class="container">
+    <div class="row">
+
+            Pick up a date:
+            <input type="date" name="bday" id="date">
+            <button id="submit">submit</button>
+
+            <script>
+             $(document).ready(function(){
+                 console.log("yoyoyoyo");
+                 $("#submit").click(function(){
+                     console.log("lolololo");
+                     console.log($("#date").val());
                  });
+             });
 
-                </script>
-        </div>
-    </div>-->
-
-    <!-- Insert coresponding data here -->
-    <div id="selected-data"></div>
-
-    <div class="useraccount">
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-user"></span>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="settings.html">Settings</a>
-                </li>
-                <li>
-                    <a href="login.html">LogOut</a>
-                </li>
-            </ul>
-        </div>
+            </script>
     </div>
+</div>-->
 
-    <div class="datacontent">
+<!-- Insert coresponding data here -->
+<div id="selected-data"></div>
 
-        <div id="timeline" style="height: 300px;"></div>
-        <canvas id="pieChart"></canvas>
+<div class="useraccount">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="settings.html">Settings</a>
+            </li>
+            <li>
+                <a href="login.html">LogOut</a>
+            </li>
+        </ul>
     </div>
+</div>
 
 
 
-    <script type="text/javascript">
-     google.charts.load('current', {'packages':['timeline']});
-     google.charts.setOnLoadCallback(drawChart);
-     function drawChart() {
-         var container = document.getElementById('timeline');
-         var chart = new google.visualization.Timeline(container);
-         var dataTable = new google.visualization.DataTable();
 
-         dataTable.addColumn({ type: 'string', id: 'President' });
-         dataTable.addColumn({ type: 'string', id: 'Text' });
-         dataTable.addColumn({ type: 'date', id: 'Start' });
-         dataTable.addColumn({ type: 'date', id: 'End' });
+<script type="text/javascript">
+ google.charts.load('current', {'packages':['timeline']});
+ google.charts.setOnLoadCallback(drawChart);
+ function drawChart() {
+     var container = $('.graph')[0];
+     var chart = new google.visualization.Timeline(container);
+     var dataTable = new google.visualization.DataTable();
 
-         dataTable.addRows([
-             [ 'Facebook', '', new Date(0,0,0,12,0,0),  new Date(0,0,0,13,30,0) ],
-             [ 'Facebook', '', new Date(0,0,0,14,0,0),  new Date(0,0,0,15,30,0) ],
-             [ 'Google',  '', new Date(0,0,0,16,45,0),  new Date(0,0,0,17,30,0) ],
-             [ 'Amazon',  '', new Date(0,0,0,13,30,0), new Date(0,0,0,14,0,0) ],
-             [ 'Amazon',  '', new Date(0,0,0,15,30,0), new Date(0,0,0,16,45,0) ],
-             [ 'Triton Ed', '', new Date(0,0,0,17,30,0), new Date(0,0,0,18,0,0) ],
-             [ 'Calendar Tasks', 'Study Time', new Date(0,0,0,12,0,0), new Date(0,0,0,14,0,0)],
-             [ 'Calendar Tasks', 'Cram Time', new Date(0,0,0,16,0,0), new Date(0,0,0,18,0,0)]]);
+     dataTable.addColumn({ type: 'string', id: 'President' });
+     dataTable.addColumn({ type: 'string', id: 'Text' });
+     dataTable.addColumn({ type: 'date', id: 'Start' });
+     dataTable.addColumn({ type: 'date', id: 'End' });
 
-         var options = {
-             allowHTML: true,
-             timeline: { colorByRowLabel: true },
-             'width':  1000,
-             'height': 1000,
-         };
+     dataTable.addRows([
+         [ 'Facebook', '', new Date(0,0,0,12,0,0),  new Date(0,0,0,13,30,0) ],
+         [ 'Facebook', '', new Date(0,0,0,14,0,0),  new Date(0,0,0,15,30,0) ],
+         [ 'Google',  '', new Date(0,0,0,16,45,0),  new Date(0,0,0,17,30,0) ],
+         [ 'Amazon',  '', new Date(0,0,0,13,30,0), new Date(0,0,0,14,0,0) ],
+         [ 'Amazon',  '', new Date(0,0,0,15,30,0), new Date(0,0,0,16,45,0) ],
+         [ 'Triton Ed', '', new Date(0,0,0,17,30,0), new Date(0,0,0,18,0,0) ],
+         [ 'Calendar Tasks', 'Study Time', new Date(0,0,0,12,0,0), new Date(0,0,0,14,0,0)],
+         [ 'Calendar Tasks', 'Cram Time', new Date(0,0,0,16,0,0), new Date(0,0,0,18,0,0)]]);
 
-         chart.draw(dataTable);
+     var options = {
+         allowHTML: true,
+         timeline: { colorByRowLabel: true },
+         'width':  '100%',
+         'height': 1000,
+     };
+
+     chart.draw(dataTable);
+ }
+</script>
+
+
+
+<div>
+
+</div>
+<!--
+<script>
+ console.log("hello");
+
+ const requestURL = 'users/' + localStorage.getItem("username");
+ console.log('making ajax request to:', requestURL);
+
+ $.ajax({
+     // all URLs are relative to http://localhost:3000/
+     url: requestURL,
+     type: 'GET',
+     dataType: 'json',
+     success: (data) => {
+         console.log('You received some data!', data);
+         $('#socialMed').html('Total Social Media: ' + data.socialMedia);
+         $('#onlineT').html('Total Online TV: ' + data.onlineTV);
+         $('#edu').html('Total Education: ' + data.education);
+         $('#oth').html('Total Other: ' + data.other);
+
+     },
+ }); //ajax match
+
+ //pie
+ var ctxP = document.getElementById("pieChart").getContext('2d');
+ var myPieChart = new Chart(ctxP, {
+     type: 'pie',
+     data: {
+         labels: ["Social Media", "Online TV", "Education", "Other"],
+         datasets: [{
+             data: [300, 100, 40, 120],
+             backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+             hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+         }]
+     },
+     options: {
+         responsive: true
      }
-    </script>
+ });
 
-    <!--
-    <script>
-     console.log("hello");
+ $("#pieChart").click(
+     function (evt) {
+         var activePoints = myPieChart.getElementsAtEvent(evt);
+         clickindex = activePoints[0]["_index"];
 
-     const requestURL = 'users/' + localStorage.getItem("username");
-     console.log('making ajax request to:', requestURL);
-
-     $.ajax({
-         // all URLs are relative to http://localhost:3000/
-         url: requestURL,
-         type: 'GET',
-         dataType: 'json',
-         success: (data) => {
-             console.log('You received some data!', data);
-             $('#socialMed').html('Total Social Media: ' + data.socialMedia);
-             $('#onlineT').html('Total Online TV: ' + data.onlineTV);
-             $('#edu').html('Total Education: ' + data.education);
-             $('#oth').html('Total Other: ' + data.other);
-
-         },
-     }); //ajax match
-
-     //pie
-     var ctxP = document.getElementById("pieChart").getContext('2d');
-     var myPieChart = new Chart(ctxP, {
-         type: 'pie',
-         data: {
-             labels: ["Social Media", "Online TV", "Education", "Other"],
-             datasets: [{
-                 data: [300, 100, 40, 120],
-                 backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-                 hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-             }]
-         },
-         options: {
-             responsive: true
+         if (clickindex == 0) {
+             location.href = "socialmedia.html";
+         } else if (clickindex == 1) {
+             location.href = "onlinetv.html";
+         } else if (clickindex == 2) {
+             location.href = "education.html";
+         } else if (clickindex == 3) {
+             location.href = "other.html";
          }
-     });
 
-     $("#pieChart").click(
-         function (evt) {
-             var activePoints = myPieChart.getElementsAtEvent(evt);
-             clickindex = activePoints[0]["_index"];
+         //var url = "http://example.com/?label=" + activePoints[0].label + "&value=" + activePoints[0].value;
+         //alert(url);
+     }
+ );
+</script>
 
-             if (clickindex == 0) {
-                 location.href = "socialmedia.html";
-             } else if (clickindex == 1) {
-                 location.href = "onlinetv.html";
-             } else if (clickindex == 2) {
-                 location.href = "education.html";
-             } else if (clickindex == 3) {
-                 location.href = "other.html";
-             }
-
-             //var url = "http://example.com/?label=" + activePoints[0].label + "&value=" + activePoints[0].value;
-             //alert(url);
-         }
-     );
-    </script>
-
-    <div id="socialMed"></div>
-    <div id="onlineT"></div>
-    <div id="edu"></div>
-    <div id="oth"></div>-->
-
-    <div>
-        
-    </div>
-
+<div id="socialMed"></div>
+<div id="onlineT"></div>
+<div id="edu"></div>
+<div id="oth"></div>-->
 </body>
 
 </html>

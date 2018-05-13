@@ -7,6 +7,8 @@ const db = new sqlite3.Database('web_data.db')
 
 app.use(express.static('static_files'));
 
+const tableDates =
+    '[04_21_2018],[04_22_2018],[04_23_2018],[04_24_2018],[04_25_2018],[04_26_2018],[04_27_2018]';
 /*deprecated database
 const fakeDatabase = {
   'john': {socialMedia: 300, onlineTV: 100, education: 40, other: 120},
@@ -46,21 +48,57 @@ app.get('/users/:userid', (req, res) => {
   }
 });
 
-// GET information on specific URL
-//
-// To test, open these URLs in your browser:
-//   http://localhost:3000/users/Philip
-//   http://localhost:3000/users/Carol
-//   http://localhost:3000/users/invalidusername
-// NOTE TO SELF: Need to figure out correct way of looking up by table,
-// and displaying entire table. Needs testing.
 
-app.get('/website/:url', (req, res) => {
+//gets all data on given date
+app.get('/data/date/:dateURL/', (req, res) =>{
+  const urlLookup = req.params.dateURL;
+  db.all(
+    'SELECT * FROM ' + urlLookup.toString(),
+    (err, rows) =>
+    {
+      if(rows.length > 0) {
+
+        res.send(rows);
+      } else {
+        res.send({});
+      }
+    }
+  );
+});
+
+//gets all data on given site for given day
+app.get('/data/date/:dateURL/:url', (req, res) =>{
+  let dateLookup = req.params.dateURL;
+  let urlToLookup = req.params.url;
+
+  //prevents server from crashing if invalid date is inputted
+  if(tableDates.indexOf(dateLookup.toString()) == -1)
+        {dateLookup = '[04_21_2018]'; urlToLookup = '';}
+
+  db.all(
+    'SELECT * FROM ' + dateLookup.toString() + ' WHERE URL=$URL',
+    {
+      $URL: urlToLookup
+    },
+    (err, rows) =>
+    {
+      if(rows.length > 0) {
+
+        res.send(rows);
+      } else {
+        res.send({});
+      }
+    }
+  );
+});
+
+//gets all data on given site for all days
+app.get('/data/all/:url', (req, res) => {
   const urlToLookup = req.params.url; // matches ':url' above
 
   // db.all() fetches all results from an SQL query into the 'rows' variable:
   db.all(
-    'SELECT * FROM [04_21_2018] WHERE URL=$URL',
+    'SELECT * FROM allSites WHERE URL=$URL',
     // parameters to SQL query:
     {
       $URL: urlToLookup
@@ -69,9 +107,24 @@ app.get('/website/:url', (req, res) => {
     (err, rows) => {
       console.log(rows);
       if (rows.length > 0) {
-        res.send(rows[0]);
+        res.send(rows);
       } else {
         res.send({}); // failed, so return an empty object instead of undefined
+      }
+    }
+  );
+});
+
+//gets all data available
+app.get('/data/all', (req, res) =>{
+  db.all(
+    'SELECT * FROM allSites',
+    (err, rows) =>
+    {
+      if(rows.length > 0) {
+        res.send(rows);
+      } else {
+        res.send({});
       }
     }
   );
