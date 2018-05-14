@@ -8,7 +8,7 @@ let allSitesClicked = false;
 let isDateDirect = false;
     $(document).ready(() => {
       $('#allSitesButton').click( () =>{
-        allSitesClicked = !allSitesClicked;
+        //allSitesClicked = !allSitesClicked;
         isDateDirect = false;
         $('#dateButton').click();
 
