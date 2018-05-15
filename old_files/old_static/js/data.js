@@ -1,8 +1,6 @@
 function totalDuration(rows)
 {
   const timeArray = [0,0,0];
-  if(rows[0].URL == 'URL')
-    {rows[0].duration = '0:00:00';}
   //Place entire duration of website throughout given day
   for(let i = 0; i < rows.length; i++)
   {
@@ -84,8 +82,6 @@ function makeTimeline(data)
 {
   google.charts.load('current', {'packages':['timeline']});
   google.charts.setOnLoadCallback(drawChart);
-  const onlyTop = arguments[1];
-  const topSites = arguments[2];
   function drawChart() {
 
       var container = $('.graph')[0];
@@ -102,23 +98,8 @@ function makeTimeline(data)
       {
         if(x.URL != 'URL')
         {
-          if(onlyTop)
-          {
-            rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
-            dataTable.addRow(rowData);
-          }
-          else
-          {
-            for (const y of topSites)
-            {
-              if(x.URL == y.URL)
-              {
-                rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
-                dataTable.addRow(rowData);
-              }
-            }
-          }
-
+          rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
+          dataTable.addRow(rowData);
         }
 
       }
@@ -177,6 +158,14 @@ function makeBarChart(data)
          title: 'Total Emails Received Throughout the Day',
          height: 450,
          bar: {groupWidth: '100%'}
+        //  hAxis: {
+        //   title: 'Time of Day',
+        //   format: 'h:mm',
+        //   viewWindow: {
+        //     min: [0, 0, 0],
+        //     max: [23, 59, 0]
+        //   }
+        // }
        };
 
       var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
@@ -187,7 +176,7 @@ function makeBarChart(data)
 
 function makeDayChart(data)
 {
-    mainTitle = nameTitle(data[0].URL);
+
     google.charts.load('current', {'packages':['corechart', 'bar']});
        google.charts.setOnLoadCallback(drawChart);
 
@@ -212,13 +201,13 @@ function makeDayChart(data)
              switch (timeOfDay)
              {
                case 0: morning += duration;
-               // console.log(morning);
+               console.log(morning);
                break;
                case 1: afternoon += duration;
-               // console.log(afternoon);
+               console.log(afternoon);
                break;
                case 2: evening += duration;
-               // console.log(evening);
+               console.log(evening);
                break;
                default: console.log('error');
              }
@@ -227,7 +216,7 @@ function makeDayChart(data)
          morning = Math.floor((morning + 30) / 60);
          afternoon = Math.floor((afternoon + 30) / 60);
          evening = Math.floor((evening + 30) / 60);
-         // console.log(evening);
+         console.log(evening);
          dataTable.addRows([
            ['Morning', morning, 'Morning\n Duration: ' + morning + ' minutes'],
            ['Afternoon', afternoon, 'Afternoon\n Duration: ' + afternoon + ' minutes'],
@@ -235,61 +224,7 @@ function makeDayChart(data)
          ]);
 
          var options = {
-           title: mainTitle,
-           height: 450,
-           bar: {groupWidth: '100%'}
-         };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
-
-         chart.draw(dataTable, google.charts.Bar.convertOptions(options));
-       }
-};
-
-function makeWeekChart(data)
-{
-    mainTitle = nameTitle(data[0].URL);
-    google.charts.load('current', {'packages':['corechart', 'bar']});
-       google.charts.setOnLoadCallback(drawChart);
-
-       function drawChart() {
-
-         var dataTable = new google.visualization.DataTable();
-         dataTable.addColumn('string', 'Day of Week');
-         dataTable.addColumn('number', 'Duration');
-         dataTable.addColumn({type: 'string', role: 'tooltip'});
-
-         var rowData;
-         var week = [0,0,0,0,0,0,0];
-         for (const x of data)
-         {
-           if(x.URL != 'URL')
-           {
-             var duration = convertTime(x.duration, 1);
-             var date = new Date(x.timeStart);
-             var timeOfDay = findDayOfWeek(date);
-             week[timeOfDay] += duration;
-           }
-           else {
-             console.log(x.URL);
-           }
-         }
-        for (let i = 0; i < week.length; i++)
-        {
-          week[i] = Math.floor((week[i] + 30) / 60);
-        }
-         dataTable.addRows([
-           ['Sunday', week[0], 'Sunday\n Duration: ' + week[0] + ' minutes'],
-           ['Monday', week[1], 'Monday\n Duration: ' + week[1] + ' minutes'],
-           ['Tuesday', week[2], 'Tuesday\n Duration: ' + week[2] + ' minutes'],
-           ['Wednesday', week[3], 'Wednesday\n Duration: ' + week[3] + ' minutes'],
-           ['Thursday', week[4], 'Thursday\n Duration: ' + week[4] + ' minutes'],
-           ['Friday', week[5], 'Friday\n Duration: ' + week[5] + ' minutes'],
-           ['Saturday', week[6], 'Saturday\n Duration: ' + week[6] + ' minutes']
-         ]);
-
-         var options = {
-           title: mainTitle,
+           title: data[0].URL,
            height: 450,
            bar: {groupWidth: '100%'}
           //  hAxis: {
@@ -305,15 +240,14 @@ function makeWeekChart(data)
         var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
 
          chart.draw(dataTable, google.charts.Bar.convertOptions(options));
-
-     };
+       }
 };
-
 //timeUnit 0 = minutes, 1 = seconds
 function convertTime(duration, timeUnit)
 {
   const regex = '([0-9]*):([0-9]*):([0-9]*)';
   duration = duration.match(regex);
+  console.log(duration);
   let hours = parseInt(duration[1]);
   let minutes = parseInt(duration[2]);
   let seconds = parseInt(duration[3]);
@@ -328,6 +262,7 @@ function convertTime(duration, timeUnit)
   else if(timeUnit == 1)
   {
     minutes += (hours * 60);
+    console.log(minutes);
     seconds += (minutes * 60);
     duration = seconds;
   }
@@ -346,20 +281,6 @@ function findTimeOfDay(date)
   else
     timeOfDay = 2;
 
-  // console.log(timeOfDay)
+  console.log(timeOfDay)
   return timeOfDay;
-};
-
-function findDayOfWeek(date)
-{
-  return date.getDay();
-};
-
-function nameTitle(name)
-{
-  if (name == 'URL')
-  {
-    name = 'All Sites';
-  }
-  return name;
 }
