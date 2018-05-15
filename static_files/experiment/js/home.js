@@ -5,18 +5,18 @@ let chartType;
 let lastFive;
 let getData;
 let allSitesClicked = false;
-let isDateDirect = false;
     $(document).ready(() => {
       $('#allSitesButton').click( () =>{
         //allSitesClicked = !allSitesClicked;
-        isDateDirect = false;
-        $('#dateButton').click();
+        allSitesClicked = true;
+        easyFix(false);
 
       })
         $('#dayButton').click(() =>
         {
             displaySiteGraph(false);
         });
+        $('#dayButton').click();
 
         $('#weekButton').click(() =>
       {
@@ -26,7 +26,21 @@ let isDateDirect = false;
           displaySiteGraph(false);
         });
 
+        $('#top5Button').click(() =>
+      {
+        allSitesClicked = false;
+        easyFix(false, 5);
+        //setTimeout(easyFix, 300);
+      });
+
+      $('#top10Button').click(() =>
+    {
+      allSitesClicked = false;
+      easyFix(false, 10);
+      //setTimeout(easyFix, 300);
+    });
         $('#dateButton').click( () => {
+          allSitesClicked = false;
           easyFix(true);
           setTimeout(easyFix, 300);
         });
@@ -55,12 +69,10 @@ function showOrHideSites()
     for(let i=5; i < lis.length; i++) {
       lis[i].remove();
     }
-    $('#allSitesButton').html('View All Sites');
     $('#showSitesHeader').html('<h1>Top 5 Sites</h1>');
   }
   else
   {
-      $('#allSitesButton').html('View Top 5');
       $('#showSitesHeader').html('<h1>All Sites</h1>');
   }
 
@@ -75,6 +87,8 @@ function easyFix()
   dateGiven = dateGiven[1] + '\/' + dateGiven[2] + '\/' + dateGiven[0];
       $('#dailyTimeline').html('<h1>Daily Timeline - ' + dateGiven + '</h1>');
   const displayGraph = arguments[0];
+  const numOfSites = arguments[1];
+  console.log(numOfSites);
   $.ajax({
       url: urlName,
       type: 'GET',
@@ -82,7 +96,7 @@ function easyFix()
       success: (data) => {
         console.log(displayGraph);
         if(!displayGraph)
-          makeTimeline(data, allSitesClicked, allData.slice(0,5));
+          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites));
 
           console.log('got website data');
           $('#timeStart').html('<ul></ul>');
