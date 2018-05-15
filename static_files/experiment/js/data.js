@@ -238,14 +238,6 @@ function makeDayChart(data)
            title: mainTitle,
            height: 450,
            bar: {groupWidth: '100%'}
-          //  hAxis: {
-          //   title: 'Time of Day',
-          //   format: 'h:mm',
-          //   viewWindow: {
-          //     min: [0, 0, 0],
-          //     max: [23, 59, 0]
-          //   }
-          // }
          };
 
         var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));

@@ -90,24 +90,21 @@
         <!-- <li class="breadcrumb-item">
           <a href="#">Dashboard</a>
         </li> -->
-          <li class="breadcrumb-item active">My Dashboard</li>
+          <li class="breadcrumb-item active">Website Specific Usage</li>
       </ol>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Day</a>
+              <a class="nav-link active" id="dayButton" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" >Day</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Week</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Month</a>
+              <a class="nav-link" id="weekButton" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Week</a>
           </li>
       </ul>
-      <div class="tab-content" id="myTabContent">
+      <!-- <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">111</div>
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2222</div>
           <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">333</div>
-      </div>
+      </div> -->
       <!-- Icon Cards-->
       <h1>Last Week's Website Habits</h1>
       <p>View your specific website habits by time of day or by day of week.</p>
@@ -115,8 +112,7 @@
        Website to Look Up:
         <input id="nameBox" type="text" size="20"/>
         <!-- <button id="readButton">Get Website Stats</button> -->
-        <button id="dayButton">Time of Day</button>
-        <button id="weekButton">Day of Week</button>
+        <button id="submitButton">submit</button>
 
 
         <div class="datacontent">
@@ -127,14 +123,6 @@
         <div id="timeStart"></div>
         <div id="timeEnd"></div>
         <div id="duration"></div>
-
-
-
-
-
-
-
-
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
@@ -182,8 +170,7 @@
     <script src="js/sb-admin-datatables.min.js"></script>
     <script src="js/sb-admin-charts.min.js"></script>
   </div>
-
-
+  <script></script>
 
 </body>
 
