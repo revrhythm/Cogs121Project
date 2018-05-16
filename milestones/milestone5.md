@@ -4,7 +4,7 @@
 View the statistics on the number of minutes spent on the specific website "youtube.com" during different days of the week.
 
 ### User Action 2:
-View the top five websites used on the day 04/25/2018, and check how many minutes were spend on "yahoo.com" early in the morning that day.
+View the top five websites used on the day 2018-04-25, and check how many minutes were spent on "usgs.gov" that morning.
 
 ### Improvements:
 
