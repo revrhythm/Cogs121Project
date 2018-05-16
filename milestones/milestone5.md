@@ -1,10 +1,10 @@
 # Milestone 4
 
 ### User Action 1:
-View the statistics on the number of minutes spent on the specific website "youtube.com" during different days of the week.
+Click on Stats > Website Specific Usage, view the statistics on the number of minutes spent on the specific website "youtube.com" during different days of the week.
 
 ### User Action 2:
-View the top five websites used on the day 2018-04-25, and check how many minutes were spent on "usgs.gov" that morning.
+Click on Calendar, view the top five websites used on the day 2018-04-25, and check how many minutes were spent on "usgs.gov" that morning.
 
 ### Improvements:
 
