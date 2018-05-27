@@ -21,6 +21,7 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/home.js"></script>
   <script src="js/data.js"></script>
+    <script src="js/calendar.js"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -94,20 +95,26 @@
       </ol>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
-              <a class="nav-link active" id="allSitesButton" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All</a>
+              <a class="nav-link active" id="allSitesButton" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">See All</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" id="top5Button" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Top 5</a>
+              <a class="nav-link" id="top5Button" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">See Less</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
               <a class="nav-link" id="top10Button" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Top 10</a>
-          </li>
+          </li> -->
       </ul>
       <!-- Icon Cards-->
       <div id=dailyTimeline>
           <h1>Daily Timeline</h1>
       </div>
       <p>View your web usage as a daily timeline. You have recorded data from 04/21/2018 - 04/28/2018.</p>
+      <div id="eventList">
+        Events:
+        <!-- <button class="eventButton"  type="button" value="Homework">Homework</button>
+        <button class="eventButton"  type="button" value="Silly Cat Videos">Silly Cat Videos</button> -->
+        <!-- <button id="noEventsButton"  type="button" value="No Events">No Events</button> -->
+      </div>
         <div id="calendar">
           Enter Date:
           <input id="dateBox" type="date" value="2018-04-21">

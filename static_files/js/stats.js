@@ -8,8 +8,6 @@ let allSitesClicked = false;
 let activeNav = 0;
 let isDateDirect = false;
 let isWeek = false;
-let events = [];
-
 
 $(document).ready(() => {
 
@@ -51,7 +49,6 @@ $(document).ready(() => {
 
         $('#top5Button').click(() =>
       {
-
         allSitesClicked = false;
         activeNav = 5;
         easyFix(true);
@@ -83,13 +80,15 @@ $(document).ready(() => {
           }
         });
 
-
     });
 
     $('#readButton').click(() => {
         displaySiteGraph(false);
     });
 
+    $('#event').click(() => {
+      
+    })
     // http://api.jquery.com/ajaxerror/
     // $('#allSitesButton').click();
 
@@ -127,6 +126,7 @@ function easyFix()
       $('#dailyTimeline').html('<h1>Daily Timeline - ' + dateGiven + '</h1>');
   const dontDisplay = arguments[0];
   const numOfSites = activeNav;
+  const events = '/data/events/' + 'Homework';
   $.ajax({
       url: urlName,
       type: 'GET',
@@ -134,7 +134,7 @@ function easyFix()
       success: (data) => {
         if(!dontDisplay)
         {
-          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites), events)
+          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites), [events])
         }
 
           console.log('got website data');

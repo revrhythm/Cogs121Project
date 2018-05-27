@@ -3,7 +3,7 @@ function totalDuration(rows)
   const timeArray = [0,0,0];
   if(rows[0].URL == 'URL')
     {rows[0].duration = '0:00:00';}
-  //Place entire duration of website throughout given day
+  //Place entire duration of website throughout given period
   for(let i = 0; i < rows.length; i++)
   {
     let first = rows[i].duration;
@@ -32,6 +32,7 @@ function totalDuration(rows)
 
 };
 
+//recieves date and changes it to database table format
 function formatDate(date)
 {
   validDates =
@@ -64,13 +65,61 @@ function formatDate(date)
   return date;
 };
 
+//  returns > 0 if longer, < 0 if shorter, = 0 if the same
 function sortByTime(a, b) {
-  regex = 'Time: ([0-9]*):([0-9]*):([0-9]*)';
-  aTime = $(a).text().match(regex);
+  let regex = 'Time: ([0-9]*):([0-9]*):([0-9]*)';
+  let aTime = $(a).text().match(regex);
   aTime = parseInt(aTime[1] + aTime[2] + aTime[3]);
-  bTime = $(b).text().match(regex)
+  let bTime = $(b).text().match(regex)
   bTime = parseInt(bTime[1] + bTime[2] + bTime[3]);
   return bTime - aTime;
+};
+
+function withinEvent(a, b) {
+  let regex = '([0-9]*):([0-9]*):([0-9]*)';
+  let aTime = new Date(a);
+  // console.log(b);
+  let bNum = b.match(regex)
+  for (let i = 0; i < bNum.length; i++)
+  {
+    bNum[i] = parseInt(bNum[i]);
+  }
+  if(b.search('PM') > -1)
+  {
+      bNum[1] = bNum[1] + 12;
+  }
+  let bTime = aTime.getHours() - bNum[1];
+  bTime == 0 ? bTime = aTime.getMinutes() - bNum[2]: null;
+  bTime == 0 ? bTime = aTime.getSeconds() - bNum[3]: null;
+  // console.log(bTime);
+  return bTime;
+};
+
+//turns event time into date (for daily events)
+function eventConversion(calEvent, date)
+{
+  let regex = '([0-9]*):([0-9]*):([0-9]*)';
+  let startTime = new Date(date);
+  let endTime = new Date(date);
+  let calStart = calEvent.timeStart.match(regex);
+  let calEnd = calEvent.timeEnd.match(regex);
+  for (let i = 0; i < calStart.length; i++)
+  {
+    calStart[i] = parseInt(calStart[i]);
+    calEnd[i] = parseInt(calEnd[i]);
+  }
+  calEvent.timeStart.search('PM') > -1 ? calStart[1] += 12 : null;
+  calEvent.timeEnd.search('PM') > -1 ? calEnd[1] += 12 : null;
+
+  startTime.setHours(calStart[1]);
+  startTime.setMinutes(calStart[2]);
+  startTime.setSeconds(calStart[3]);
+  endTime.setHours(calEnd[1]);
+  endTime.setMinutes(calEnd[2]);
+  endTime.setSeconds(calEnd[3]);
+
+  // console.log('start ' + startTime + ' c a ' + endTime);
+  return [calEvent.event, '', startTime, endTime];
 };
 
 function sortByName(a, b) {
@@ -80,14 +129,14 @@ function sortByName(a, b) {
   return a.localeCompare(b);
 };
 
-function makeTimeline(data)
+//creates timeline with data arguments[1] makes a timeline with all sites and argument [2] makes a timeline with only specified sites arguments[3] makes a timeline with events
+function makeTimeline(data, allSites, specificSites, calEvent)
 {
+  var multiEvent;
+  (calEvent.length > 1 || calEvent.length == 0) ? multiEvent = true : multiEvent = false;
   google.charts.load('current', {'packages':['timeline']});
   google.charts.setOnLoadCallback(drawChart);
-  const onlyTop = arguments[1];
-  const topSites = arguments[2];
   function drawChart() {
-
       var container = $('.graph')[0];
       var chart = new google.visualization.Timeline(container);
       var dataTable = new google.visualization.DataTable();
@@ -98,40 +147,81 @@ function makeTimeline(data)
       dataTable.addColumn({ type: 'date', id: 'End' });
 
       var rowData;
-      for (const x of data)
-      {
-        if(x.URL != 'URL')
+
+
+        if(multiEvent)
         {
-          if(onlyTop)
+          for (const x of data)
           {
-            rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
-            dataTable.addRow(rowData);
-          }
-          else
-          {
-            for (const y of topSites)
+            if(x.URL != 'URL')
             {
-              if(x.URL == y.URL)
+              if(allSites)
               {
                 rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
                 dataTable.addRow(rowData);
               }
+              else
+              {
+                //only add to row if site is in top
+                for (const y of specificSites)
+                {
+                  if(x.URL == y.URL)
+                  {
+                    rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
+                    dataTable.addRow(rowData);
+                  }
+                }
+              }
             }
           }
+        }
+        else
+        {
+          $.ajax({
+          url: calEvent,
+          type: 'GET',
+          dataType: 'json',
+          async: false,
+          success: (calEvents) => {
+            console.log(calEvents);
+            var startTime = calEvents[0].timeStart;
+            var endTime = calEvents[0].timeEnd;
 
+            for(var i = 1; i < data.length; i++)
+            {
+              // console.log('data start: ' + data[i].timeStart + '\n data end: ' + data[i].timeEnd);
+
+              if(withinEvent(data[i].timeEnd, startTime) >= 0 && withinEvent(data[i].timeStart, endTime) <= 0)
+              {
+                  if(allSites)
+                  {
+                    rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
+                    dataTable.addRow(rowData);
+                  }
+                  else
+                  {
+                    //only add to row if site is in top
+                    for (const y of specificSites)
+                    {
+                      if(data[i].URL == y.URL)
+                      {
+                        rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
+                        dataTable.addRow(rowData);
+                      }
+                    }
+                  }
+              }
+              else if (withinEvent(data[i].timeStart, endTime) < 0)//terminate for loop if end time is reached
+              {
+                i = data.length;
+              }
+            }
+              rowData = eventConversion(calEvents[0], data[1].timeStart);
+              dataTable.addRow(rowData);
+          }
+          });
         }
 
-      }
-      // console.log(data);
-      // dataTable.addRow(rowData);
-          // [ 'Facebook', '', new Date(0,0,0,12,0,0),  new Date(0,0,0,13,30,0) ],
-          // [ 'Facebook', '', new Date(0,0,0,14,0,0),  new Date(0,0,0,15,30,0) ],
-          // [ 'Google',  '', new Date(0,0,0,16,45,0),  new Date(0,0,0,17,30,0) ],
-          // [ 'Amazon',  '', new Date(0,0,0,13,30,0), new Date(0,0,0,14,0,0) ],
-          // [ 'Amazon',  '', new Date(0,0,0,15,30,0), new Date(0,0,0,16,45,0) ],
-          // [ 'Triton Ed', '', new Date(0,0,0,17,30,0), new Date(0,0,0,18,0,0) ],
-          // [ 'Calendar Tasks', 'Study Time', new Date(0,0,0,12,0,0), new Date(0,0,0,14,0,0)],
-          // [ 'Calendar Tasks', 'Cram Time', new Date(0,0,0,16,0,0), new Date(0,0,0,18,0,0)]]);
 
       var options = {
           allowHTML: true,
@@ -145,7 +235,7 @@ function makeTimeline(data)
 
 
 };
-
+//deprectated makes bar chart
 function makeBarChart(data)
 {
 
@@ -185,6 +275,7 @@ function makeBarChart(data)
      }
 };
 
+//makes the chart for the day arguments[1] has event data
 function makeDayChart(data)
 {
     mainTitle = nameTitle(data[0].URL);
@@ -246,6 +337,7 @@ function makeDayChart(data)
        }
 };
 
+//makes the chart for the week argument[1] has events
 function makeWeekChart(data)
 {
     mainTitle = nameTitle(data[0].URL);
@@ -274,6 +366,7 @@ function makeWeekChart(data)
              console.log(x.URL);
            }
          }
+
         for (let i = 0; i < week.length; i++)
         {
           week[i] = Math.floor((week[i] + 30) / 60);
@@ -292,14 +385,6 @@ function makeWeekChart(data)
            title: mainTitle,
            height: 450,
            bar: {groupWidth: '100%'}
-          //  hAxis: {
-          //   title: 'Time of Day',
-          //   format: 'h:mm',
-          //   viewWindow: {
-          //     min: [0, 0, 0],
-          //     max: [23, 59, 0]
-          //   }
-          // }
          };
 
         var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
@@ -350,11 +435,13 @@ function findTimeOfDay(date)
   return timeOfDay;
 };
 
+//dayOfWeek 0 = Sunday, 1 = Monday ... 6 = Saturday
 function findDayOfWeek(date)
 {
   return date.getDay();
 };
 
+//Changes title of URL to All Sites when All sites are calculated
 function nameTitle(name)
 {
   if (name == 'URL')
