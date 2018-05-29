@@ -17,6 +17,8 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src=" https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
 
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/home.js"></script>
@@ -93,7 +95,7 @@
         <li class="breadcrumb-item active">Home</li>
       </ol>
       <!-- Icon Cards-->
-      <h1> Today's Websites Usage</h1>
+      <h1> Today's Top 5 Websites Usage</h1>
       <p>Click the buttons on the left to explore your webite usage data.</p>
 
         <button hidden id="top5Button">View Top 5</button>
@@ -106,21 +108,47 @@
 
         <div class="datacontent">
 
-        <div id="timeline" class="graph" style="height: 500px; width: 100%"></div>
-          <!-- <canvas id="pieChart"></canvas> -->
+            <div id="timeline" class="graph" style="height: 300px; width: 100%"></div>
+            <div class="detail-datacontent">
+                <h3>Website usage duration</h3>
+                <div class="container" style="margin: 20px;">
+                    <div class="row">
+                    <canvas class="col-md-6" id="pieChart" height="auto"></canvas>
+            <div class="col-md-6" id="timeStart"></div>
+            <div id="duration"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+
         <!-- <div id="timeStart"></div>
-        <div id="timeEnd"></div>
-        <div id="duration"></div> -->
-
-
-
-
-
-
+             <div id="timeEnd"></div>
+             <div id="duration"></div> -->
 
 
     </div>
+    <script>
+        console.log("hello");
+        //pie
+        var ctxP = document.getElementById("pieChart").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+        labels: ["Youtube", "Google Doc", "Imgur", "Yahoo","Google", "other"],
+        datasets: [
+        {
+        data: [300, 100, 40, 120, 30, 30],
+        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue", "grey"],
+        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orage", "grey"]
+        }
+        ]
+        },
+        options: {
+        responsive: true
+        }
+        });
+    </script>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
@@ -152,6 +180,7 @@
         </div>
       </div>
     </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
