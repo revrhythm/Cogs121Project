@@ -3,8 +3,10 @@
 
 ### Improvements:
 
-![](milestone6Pictures/home.png)
+![](milestone6Pictures/home1.png)
+![](milestone6Pictures/home2.png)
 The home page now displays only top 5 websites, which make the view cleaner.
+Users will be able to see the timeline view of the websites, as well as a pie chart for the usage duration.
 
 
 ![](milestone6Pictures/calender.png)
