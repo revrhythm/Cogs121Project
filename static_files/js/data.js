@@ -129,6 +129,35 @@ function sortByName(a, b) {
   return a.localeCompare(b);
 };
 
+function makePieChart(topSitesData)
+{
+  var URLs = [];
+  var durations = [];
+  for(const x of topSitesData)
+  {
+    URLs.push(x.URL);
+    durations.push(convertTime(x.duration, 0));
+  }
+  console.log(URLs, durations);
+  //pie
+  var ctxP = document.getElementById("pieChart").getContext('2d');
+  var myPieChart = new Chart(ctxP, {
+  type: 'pie',
+  data: {
+  labels: URLs,
+  datasets: [
+  {
+  data: durations,
+  backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue"],
+  hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orange"]
+  }
+  ]
+  },
+  options: {
+  responsive: true
+  }
+  });
+};
 //creates timeline with data arguments[1] makes a timeline with all sites and argument [2] makes a timeline with only specified sites arguments[3] makes a timeline with events
 function makeTimeline(data, allSites, specificSites, calEvent)
 {

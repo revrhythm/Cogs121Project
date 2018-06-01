@@ -6,13 +6,13 @@ let lastFive;
 let getData;
 let allSitesClicked = false;
 let activeNav = 0;
+
 let isDateDirect = false;
 let isWeek = false;
 let events = [];
 
 
 $(document).ready(() => {
-
   $('#sortTimeButton').click( () => {
     $('#timeStart').children('li').sort(sortByTime).appendTo('#timeStart');
     allData.sort((a,b) => b.seconds - a.seconds);
@@ -37,8 +37,6 @@ $(document).ready(() => {
         isWeek = false;
     });
 
-    $('#dayButton').click(); //should add to its own js
-
     $('#weekButton').click(() =>
      {
          displaySiteGraph(true);
@@ -49,7 +47,7 @@ $(document).ready(() => {
         displaySiteGraph(isWeek);
       })
 
-        $('#top5Button').click(() =>
+    $('#top5Button').click(() =>
       {
 
         allSitesClicked = false;
@@ -59,7 +57,6 @@ $(document).ready(() => {
         //setTimeout(easyFix, 300);
       });
 
-    $('#top5Button').click(); // should add to its own js
 
     $('#top10Button').click(() =>
     {
@@ -83,8 +80,8 @@ $(document).ready(() => {
           }
         });
 
-
-    });
+    $('#top5Button').click(); // should add to its own js
+  });
 
     $('#readButton').click(() => {
         displaySiteGraph(false);
@@ -134,7 +131,11 @@ function easyFix()
       success: (data) => {
         if(!dontDisplay)
         {
-          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites), events)
+          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites), events);
+          if(window.location.href.includes('home'))
+          {
+            makePieChart(allData.slice(0,numOfSites));
+          }
         }
 
           console.log('got website data');
@@ -210,6 +211,7 @@ function displaySiteGraph(frequency)
             }
         },
     });
+
 }
 
 $(document).ajaxError(() => {
