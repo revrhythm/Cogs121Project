@@ -102,7 +102,7 @@
         <button hidden id="sortTimeButton">Sort Sites by Time</button>
         <div hidden id="calendar">
           Enter Date:
-          <input id="dateBox" type="date">
+          <input id="dateBox" type="date" value="2018-04-23">
           <input id="dateButton" type="submit">
         </div>
 
@@ -111,12 +111,12 @@
             <div id="timeline" class="graph" style="height: 300px; width: 100%"></div>
             <div class="detail-datacontent">
                 <h3>Website usage duration</h3>
-                <p>Total: 123</p>
+                <!-- <p id =listTotal>Total: 123</p> -->
                 <div class="container" style="margin: 20px;">
-                    <div class="row">
-                    <canvas class="col-md-6" id="pieChart" height="auto"></canvas>
-            <div class="col-md-6" id="timeStart"></div>
-            <div id="duration"></div>
+            <div class="row">
+                <canvas class="col-8" id="pieChart" width="auto" height="auto"></canvas>
+                <div class="col-3" id="timeStart"></div>
+                <div id="duration"></div>
 
                     </div>
                 </div>
@@ -130,30 +130,32 @@
 
     </div>
     <script>
-        var ctxP = document.getElementById("pieChart").getContext('2d');
-        var myPieChart = new Chart(ctxP, {
-        type: 'pie',
-        data: {
-        labels: ["Youtube", "Google Doc", "Imgur", "Yahoo","Google", "other"],
-        datasets: [
-        {
-        data: [300, 100, 40, 120, 30, 30],
-        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue", "grey"],
-        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orage", "grey"]
-        }
-        ]
-        },
-        options: {
-        responsive: true
-        }
-        });
+        // console.log("hello");
+        // //pie
+        // var ctxP = document.getElementById("pieChart").getContext('2d');
+        // var myPieChart = new Chart(ctxP, {
+        // type: 'pie',
+        // data: {
+        // labels: ["Youtube", "Google Doc", "Imgur", "Yahoo","Google", "other"],
+        // datasets: [
+        // {
+        // data: [300, 100, 40, 120, 30, 30],
+        // backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue", "grey"],
+        // hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orage", "grey"]
+        // }
+        // ]
+        // },
+        // options: {
+        // responsive: true
+        // }
+        // });
     </script>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
-          <small>Copyright © Your Website 2018</small>
+          <small>Copyright © BYoDS 2018</small>
         </div>
       </div>
     </footer>
@@ -193,7 +195,7 @@
     <script src="js/sb-admin.min.js"></script>
     <!-- Custom scripts for this page-->
     <script src="js/sb-admin-datatables.min.js"></script>
-    <script src="js/sb-admin-charts.min.js"></script>
+
   </div>
 
 
