@@ -154,7 +154,8 @@ function makePieChart(topSitesData)
   ]
   },
   options: {
-  responsive: true
+      responsive: true,
+      events:[]
   }
   });
 };
