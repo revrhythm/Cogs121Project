@@ -479,3 +479,15 @@ canvas{
     width: calc(100% - 55px);
   }
 }
+input.form-control{
+    width: 50%;
+    max-width: 300px;
+    display: inline-block;
+
+}
+
+button.btn-primary{
+    display: inline-block;
+    position: relative;
+    top: -2px;
+}
