@@ -1,51 +1,37 @@
-// let allWebTime = {URL: '', duration: '', seconds: 0};
+/*
+  This file makes ajax calls to the backend and then sends that data
+  to makeTimeline or makePiechart in data.js It also filters the data
+  depending on what the user clicks so that a timeline only displays
+  the top sites based on the duration of usage for the specified date
+*/
+
 let allData = [];
-let totalTime = 0;
 let chartType;
 let lastFive;
-let getData;
 let allSitesClicked = false;
 let activeNav = 0;
-
 let isDateDirect = false;
 let isWeek = false;
-let events = [];
 
 
 $(document).ready(() => {
   $('#sortTimeButton').click( () => {
+    // console.log('called timeButton');
     $('#timeStart').children('li').sort(sortByTime).appendTo('#timeStart');
     allData.sort((a,b) => b.seconds - a.seconds);
     showOrHideSites();
   });
 
   $('#sortNameButton').click( () => {
-
     $('#timeStart').children('li').sort(sortByName).appendTo('#timeStart');
   });
 
-    $('#allSitesButton').click( () =>{
-        allSitesClicked = true;
-        activeNav = 0;
-        easyFix(false);
-      });
-
-
-    $('#dayButton').click(() =>
-    {
-        displaySiteGraph(false);
-        isWeek = false;
+  $('#allSitesButton').click( () =>{
+      allSitesClicked = true;
+      activeNav = 0;
+      easyFix(false);
     });
 
-    $('#weekButton').click(() =>
-     {
-         displaySiteGraph(true);
-         isWeek = true;
-     });
-
-    $('#submitButton').click(() =>{
-        displaySiteGraph(isWeek);
-      })
 
     $('#top5Button').click(() =>
       {
@@ -54,16 +40,13 @@ $(document).ready(() => {
         activeNav = 5;
         easyFix(true);
         setTimeout(easyFix,300);
-        //setTimeout(easyFix, 300);
       });
-
 
     $('#top10Button').click(() =>
     {
       allSitesClicked = false;
       activeNav = 10;
       easyFix(true);
-      // easyFix(false, 10);
       setTimeout(easyFix, 300);
     });
 
@@ -80,18 +63,15 @@ $(document).ready(() => {
           }
         });
 
-    $('#top5Button').click(); // should add to its own js
+    $('#top5Button').click(); // runs top5button.click() event
   });
 
-    $('#readButton').click(() => {
-        displaySiteGraph(false);
-    });
 
-    // http://api.jquery.com/ajaxerror/
-    // $('#allSitesButton').click();
 
+//shows sites based on button clicked (ex. Show All (shows all sites), Show Less (shows top 5))
 function showOrHideSites()
 {
+  // console.log(activeNav);
     if (activeNav == 0)
     {
       $('#showSitesHeader').html('<h1>All Sites</h1>');
@@ -124,14 +104,18 @@ function easyFix()
       $('#dailyTimeline').html('<h1>Daily Timeline - ' + dateGiven + '</h1>');
   const dontDisplay = arguments[0];
   const numOfSites = activeNav;
+
+  //gets data for date specified in dateBox
   $.ajax({
       url: urlName,
       type: 'GET',
       dataType: 'json',
       success: (data) => {
+        //does not display data if arguments[0] is true
         if(!dontDisplay)
         {
-          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites), events);
+          makeTimeline(data, allSitesClicked, allData.slice(0,numOfSites));
+          //include pie chart if on homepage
           if(window.location.href.includes('home'))
           {
             makePieChart(allData.slice(0,numOfSites));
@@ -146,6 +130,7 @@ function easyFix()
             {
                 let URLtoList = false;
 
+                //checks to see if website URL has been recorded in websiteList
                 for(const y of websiteList)
                 {
                     if(x.URL === y)
@@ -153,10 +138,13 @@ function easyFix()
                         URLtoList = true;
                     }
                 }
+
+                //adds website to allData with URL, duration (for display hh:mm:ss) and duration in seconds (for comparison)
                 if(!URLtoList)
                 {
                     websiteList.push(x.URL);
                     let urlName = '../data/date/' + formatDate($('#dateBox').val()) + '/' + x.URL;
+                    //gets data from backend for a website on a specific date
                     $.ajax({
                         // all URLs are relative to http://localhost:3000/
                         url: urlName,
@@ -164,54 +152,26 @@ function easyFix()
                         dataType: 'json',
                         success: (data) => {
 
-                            let currentDuration = totalDuration(data);
-                            let allWebTime = {URL: '', duration: '', seconds: 0};
-                            allWebTime.URL = x.URL;
-                            allWebTime.duration = currentDuration;
-                            allWebTime.seconds = convertTime(currentDuration,1);
-                            allData.push(allWebTime);
+                            //makes allWebTime object that is pushed to allData array
+                            if(x.URL != 'Event')
+                              {
+                              let currentDuration = totalDuration(data);
+                              let allWebTime = {URL: '', duration: '', seconds: 0};
+                              allWebTime.URL = x.URL;
+                              allWebTime.duration = currentDuration;
+                              allWebTime.seconds = convertTime(currentDuration,1);
+                              allData.push(allWebTime);
 
-                            $('#timeStart').append('<li>' +  x.URL + '<br> &emsp;&emsp; Time: ' +allData[allData.length - 1].duration + '</li>');
-                            $('#sortTimeButton').click();
+                              //appends allData info
+                              $('#timeStart').append('<li>' +  x.URL + '<br> &emsp;&emsp; Time: ' +allData[allData.length - 1].duration + '</li>');
+                              $('#sortTimeButton').click();
+                              }
                         },
                     });
                 }
             }
         },
     });
-}
-
-//displays bar graph for site frequency: false = day, true = week
-function displaySiteGraph(frequency)
-{
-    const requestURL = '../data/all/' + $('#nameBox').val();
-    console.log('making ajax request to:', requestURL);
-    // From: http://learn.jquery.com/ajax/jquery-ajax-methods/
-    $.ajax({
-        // all URLs are relative to http://localhost:3000/
-        url: requestURL,
-        type: 'GET',
-        dataType: 'json',
-        success: (data) => {
-            // console.log(data);
-            mainTitle = nameTitle(data[0].URL);
-            console.log('You received some data!', data);
-            if(data.length > 0)
-            {
-                $('#status').html('Successfully fetched data at URL: ' + requestURL);
-                $('#timeStart').html('Website: ' + mainTitle);
-                // $('#timeEnd').html('Time End: ' + data.timeEnd);
-                totalTime = totalDuration(data);
-                $('#duration').html('Duration: ' + totalTime);
-                frequency ? makeWeekChart(data) : makeDayChart(data);
-            }
-            else {
-                $('#timeStart').html('Could not find website');
-                $('#duration').html('');
-            }
-        },
-    });
-
 }
 
 $(document).ajaxError(() => {

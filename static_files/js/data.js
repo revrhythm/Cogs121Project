@@ -1,8 +1,277 @@
+/*
+  This file makes charts from data given in the other .js files (ex. home.js, search,js)
+  The make functions manipulate the data so that it works with the chart.js or Google Charts API.
+  The other functions peform specific tasks
+*/
+
+//makes a piechart with data given
+function makePieChart(topSitesData)
+{
+  var URLs = [];
+  var durations = [];
+  for(const x of topSitesData)
+  {
+    URLs.push(x.URL);
+    durations.push(convertTime(x.duration, 0));
+  }
+  console.log(URLs, durations);
+  //pie
+  var ctxP = document.getElementById("pieChart").getContext('2d');
+  var myPieChart = new Chart(ctxP, {
+  type: 'pie',
+  data: {
+  labels: URLs,
+  datasets: [
+  {
+  data: durations,
+  backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue"],
+  hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orange"]
+  }
+  ]
+  },
+  options: {
+      responsive: true,
+      events:[]
+  }
+  });
+};
+
+//creates timeline with data arguments[1] makes a timeline with all sites and argument [2] makes a timeline with only the specified sites arguments[3] makes a timeline with events
+function makeTimeline(data, allSites, specificSites)
+{
+  google.charts.load('current', {'packages':['timeline']});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+      var container = $('.graph')[0];
+      var chart = new google.visualization.Timeline(container);
+      var dataTable = new google.visualization.DataTable();
+
+      dataTable.addColumn({ type: 'string', id: 'URL' });
+      dataTable.addColumn({ type: 'string', id: 'Event' });
+      dataTable.addColumn({ type: 'date', id: 'Start' });
+      dataTable.addColumn({ type: 'date', id: 'End' });
+
+      var rowData;
+
+          for (const x of data)
+          {
+            if(x.URL == 'Event')
+            {
+              rowData = ['Events', x.duration, new Date(x.timeStart), new Date(x.timeEnd)];
+              dataTable.addRow(rowData);
+            }
+            else if(x.URL != 'URL')
+            {
+              //adds all data for given date to timeline
+              if(allSites)
+              {
+                rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
+                dataTable.addRow(rowData);
+              }
+              else
+              {
+                //only add to row if site is in the top # of sites
+                for (const y of specificSites)
+                {
+                  if(x.URL == y.URL)
+                  {
+                    rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
+                    dataTable.addRow(rowData);
+                  }
+                }
+              }
+            }
+          }
+
+        // else
+        // {
+        //   $.ajax({
+        //   url: calEvent,
+        //   type: 'GET',
+        //   dataType: 'json',
+        //   async: false,
+        //   success: (calEvents) => {
+        //     console.log(calEvents);
+        //     var startTime = calEvents[0].timeStart;
+        //     var endTime = calEvents[0].timeEnd;
+        //
+        //     for(var i = 1; i < data.length; i++)
+        //     {
+        //       // console.log('data start: ' + data[i].timeStart + '\n data end: ' + data[i].timeEnd);
+        //
+        //       if(withinEvent(data[i].timeEnd, startTime) >= 0 && withinEvent(data[i].timeStart, endTime) <= 0)
+        //       {
+        //           if(allSites)
+        //           {
+        //             rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
+        //             dataTable.addRow(rowData);
+        //           }
+        //           else
+        //           {
+        //             //only add to row if site is in top
+        //             for (const y of specificSites)
+        //             {
+        //               if(data[i].URL == y.URL)
+        //               {
+        //                 rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
+        //                 dataTable.addRow(rowData);
+        //               }
+        //             }
+        //           }
+        //       }
+        //       else if (withinEvent(data[i].timeStart, endTime) < 0)//terminate for loop if end time is reached
+        //       {
+        //         i = data.length;
+        //       }
+        //     }
+        //       rowData = eventConversion(calEvents[0], data[1].timeStart);
+        //       dataTable.addRow(rowData);
+        //   }
+        //   });
+        // }
+      var options = {
+          allowHTML: true,
+          timeline: { colorByRowLabel: true },
+          'width':  '100%',
+          'height': '100%',
+      };
+
+      chart.draw(dataTable);
+  }
+
+
+};
+
+//makes the chart for the day arguments[1] has event data
+function makeDayChart(data)
+{
+    mainTitle = nameTitle(data[0].URL);
+    google.charts.load('current', {'packages':['corechart', 'bar']});
+       google.charts.setOnLoadCallback(drawChart);
+
+       function drawChart() {
+
+         var dataTable = new google.visualization.DataTable();
+         dataTable.addColumn('string', 'Time of Day');
+         dataTable.addColumn('number', 'Duration');
+         dataTable.addColumn({type: 'string', role: 'tooltip'});
+
+         var rowData;
+         var morning = 0;
+         var afternoon = 0;
+         var evening = 0;
+         for (const x of data)
+         {
+           if(x.URL != 'URL' && x.URL != 'Event')
+           {
+             console.log(x.duration);
+             var duration = convertTime(x.duration, 1);
+             var date = new Date(x.timeStart);
+             var timeOfDay = findTimeOfDay(date);
+             switch (timeOfDay)
+             {
+               case 0: morning += duration;
+               // console.log(morning);
+               break;
+               case 1: afternoon += duration;
+               // console.log(afternoon);
+               break;
+               case 2: evening += duration;
+               // console.log(evening);
+               break;
+               default: console.log('error');
+             }
+           }
+         }
+         morning = Math.floor((morning + 30) / 60);
+         afternoon = Math.floor((afternoon + 30) / 60);
+         evening = Math.floor((evening + 30) / 60);
+         // console.log(evening);
+         dataTable.addRows([
+           ['Morning', morning, 'Morning\n Duration: ' + morning + ' minutes'],
+           ['Afternoon', afternoon, 'Afternoon\n Duration: ' + afternoon + ' minutes'],
+           ['Evening', evening, 'Evening\n Duration: ' + evening + ' minutes']
+         ]);
+
+         var options = {
+           title: mainTitle,
+           height: 450,
+           bar: {groupWidth: '100%'}
+         };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
+
+         chart.draw(dataTable, google.charts.Bar.convertOptions(options));
+       }
+};
+
+//makes the chart for the week argument[1] has events
+function makeWeekChart(data)
+{
+    mainTitle = nameTitle(data[0].URL);
+    google.charts.load('current', {'packages':['corechart', 'bar']});
+       google.charts.setOnLoadCallback(drawChart);
+
+       function drawChart() {
+
+         var dataTable = new google.visualization.DataTable();
+         dataTable.addColumn('string', 'Day of Week');
+         dataTable.addColumn('number', 'Duration');
+         dataTable.addColumn({type: 'string', role: 'tooltip'});
+
+         var rowData;
+         var week = [0,0,0,0,0,0,0];
+         for (const x of data)
+         {
+           if(x.URL != 'URL' && x.URL != 'Event')
+           {
+             var duration = convertTime(x.duration, 1);
+             var date = new Date(x.timeStart);
+             var timeOfDay = findDayOfWeek(date);
+             week[timeOfDay] += duration;
+           }
+           else {
+             console.log(x.URL);
+           }
+         }
+
+        //converts time data for each day of the week into minutes
+        for (let i = 0; i < week.length; i++)
+        {
+          week[i] = Math.floor((week[i] + 30) / 60);
+        }
+
+        //Adds each day in the order listed below
+         dataTable.addRows([
+           ['Sunday', week[0], 'Sunday\n Duration: ' + week[0] + ' minutes'],
+           ['Monday', week[1], 'Monday\n Duration: ' + week[1] + ' minutes'],
+           ['Tuesday', week[2], 'Tuesday\n Duration: ' + week[2] + ' minutes'],
+           ['Wednesday', week[3], 'Wednesday\n Duration: ' + week[3] + ' minutes'],
+           ['Thursday', week[4], 'Thursday\n Duration: ' + week[4] + ' minutes'],
+           ['Friday', week[5], 'Friday\n Duration: ' + week[5] + ' minutes'],
+           ['Saturday', week[6], 'Saturday\n Duration: ' + week[6] + ' minutes']
+         ]);
+
+         var options = {
+           title: mainTitle,
+           height: 450,
+           bar: {groupWidth: '100%'}
+         };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
+
+         chart.draw(dataTable, google.charts.Bar.convertOptions(options));
+
+     };
+};
+
+//caculates total duration of given data (all sites or specific sites given)
 function totalDuration(rows)
 {
   const timeArray = [0,0,0];
   if(rows[0].URL == 'URL')
     {rows[0].duration = '0:00:00';}
+
   //Place entire duration of website throughout given period
   for(let i = 0; i < rows.length; i++)
   {
@@ -65,7 +334,7 @@ function formatDate(date)
   return date;
 };
 
-//  returns > 0 if longer, < 0 if shorter, = 0 if the same
+//  sorts duration of two websites
 function sortByTime(a, b) {
   let regex = 'Time: ([0-9]*):([0-9]*):([0-9]*)';
   let aTime = $(a).text().match(regex);
@@ -75,353 +344,12 @@ function sortByTime(a, b) {
   return bTime - aTime;
 };
 
-function withinEvent(a, b) {
-  let regex = '([0-9]*):([0-9]*):([0-9]*)';
-  let aTime = new Date(a);
-  // console.log(b);
-  let bNum = b.match(regex)
-  for (let i = 0; i < bNum.length; i++)
-  {
-    bNum[i] = parseInt(bNum[i]);
-  }
-  if(b.search('PM') > -1)
-  {
-      bNum[1] = bNum[1] + 12;
-  }
-  let bTime = aTime.getHours() - bNum[1];
-  bTime == 0 ? bTime = aTime.getMinutes() - bNum[2]: null;
-  bTime == 0 ? bTime = aTime.getSeconds() - bNum[3]: null;
-  // console.log(bTime);
-  return bTime;
-};
-
-//turns event time into date (for daily events)
-function eventConversion(calEvent, date)
-{
-  let regex = '([0-9]*):([0-9]*):([0-9]*)';
-  let startTime = new Date(date);
-  let endTime = new Date(date);
-  let calStart = calEvent.timeStart.match(regex);
-  let calEnd = calEvent.timeEnd.match(regex);
-  for (let i = 0; i < calStart.length; i++)
-  {
-    calStart[i] = parseInt(calStart[i]);
-    calEnd[i] = parseInt(calEnd[i]);
-  }
-  calEvent.timeStart.search('PM') > -1 ? calStart[1] += 12 : null;
-  calEvent.timeEnd.search('PM') > -1 ? calEnd[1] += 12 : null;
-
-  startTime.setHours(calStart[1]);
-  startTime.setMinutes(calStart[2]);
-  startTime.setSeconds(calStart[3]);
-  endTime.setHours(calEnd[1]);
-  endTime.setMinutes(calEnd[2]);
-  endTime.setSeconds(calEnd[3]);
-
-  // console.log('start ' + startTime + ' c a ' + endTime);
-  return [calEvent.event, '', startTime, endTime];
-};
-
+// sorts URLs of two websites
 function sortByName(a, b) {
   a = $(a).text().split(' ')[0];
   b = $(b).text().split(' ')[0];
 
   return a.localeCompare(b);
-};
-
-function makePieChart(topSitesData)
-{
-  var URLs = [];
-  var durations = [];
-  for(const x of topSitesData)
-  {
-    URLs.push(x.URL);
-    durations.push(convertTime(x.duration, 0));
-  }
-  console.log(URLs, durations);
-  //pie
-  var ctxP = document.getElementById("pieChart").getContext('2d');
-  var myPieChart = new Chart(ctxP, {
-  type: 'pie',
-  data: {
-  labels: URLs,
-  datasets: [
-  {
-  data: durations,
-  backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "blue"],
-  hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5","orange"]
-  }
-  ]
-  },
-  options: {
-      responsive: true,
-      events:[]
-  }
-  });
-};
-//creates timeline with data arguments[1] makes a timeline with all sites and argument [2] makes a timeline with only specified sites arguments[3] makes a timeline with events
-function makeTimeline(data, allSites, specificSites, calEvent)
-{
-  var multiEvent;
-  (calEvent.length > 1 || calEvent.length == 0) ? multiEvent = true : multiEvent = false;
-  google.charts.load('current', {'packages':['timeline']});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-      var container = $('.graph')[0];
-      var chart = new google.visualization.Timeline(container);
-      var dataTable = new google.visualization.DataTable();
-
-      dataTable.addColumn({ type: 'string', id: 'URL' });
-      dataTable.addColumn({ type: 'string', id: 'Task' });
-      dataTable.addColumn({ type: 'date', id: 'Start' });
-      dataTable.addColumn({ type: 'date', id: 'End' });
-
-      var rowData;
-
-
-        if(multiEvent)
-        {
-          for (const x of data)
-          {
-            if(x.URL != 'URL')
-            {
-              if(allSites)
-              {
-                rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
-                dataTable.addRow(rowData);
-              }
-              else
-              {
-                //only add to row if site is in top
-                for (const y of specificSites)
-                {
-                  if(x.URL == y.URL)
-                  {
-                    rowData = [x.URL, '', new Date(x.timeStart), new Date(x.timeEnd)];
-                    dataTable.addRow(rowData);
-                  }
-                }
-              }
-            }
-          }
-        }
-        else
-        {
-          $.ajax({
-          url: calEvent,
-          type: 'GET',
-          dataType: 'json',
-          async: false,
-          success: (calEvents) => {
-            console.log(calEvents);
-            var startTime = calEvents[0].timeStart;
-            var endTime = calEvents[0].timeEnd;
-
-            for(var i = 1; i < data.length; i++)
-            {
-              // console.log('data start: ' + data[i].timeStart + '\n data end: ' + data[i].timeEnd);
-
-              if(withinEvent(data[i].timeEnd, startTime) >= 0 && withinEvent(data[i].timeStart, endTime) <= 0)
-              {
-                  if(allSites)
-                  {
-                    rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
-                    dataTable.addRow(rowData);
-                  }
-                  else
-                  {
-                    //only add to row if site is in top
-                    for (const y of specificSites)
-                    {
-                      if(data[i].URL == y.URL)
-                      {
-                        rowData = [data[i].URL, '', new Date(data[i].timeStart), new Date(data[i].timeEnd)];
-                        dataTable.addRow(rowData);
-                      }
-                    }
-                  }
-              }
-              else if (withinEvent(data[i].timeStart, endTime) < 0)//terminate for loop if end time is reached
-              {
-                i = data.length;
-              }
-            }
-              rowData = eventConversion(calEvents[0], data[1].timeStart);
-              dataTable.addRow(rowData);
-          }
-          });
-        }
-
-
-      var options = {
-          allowHTML: true,
-          timeline: { colorByRowLabel: true },
-          'width':  '100%',
-          'height': '100%',
-      };
-
-      chart.draw(dataTable);
-  }
-
-
-};
-//deprectated makes bar chart
-function makeBarChart(data)
-{
-
-  google.charts.load('current', {'packages':['corechart', 'bar']});
-     google.charts.setOnLoadCallback(drawChart);
-
-     function drawChart() {
-
-       var dataTable = new google.visualization.DataTable();
-       dataTable.addColumn('datetime', 'Time of Day');
-       dataTable.addColumn('number', 'Duration');
-       dataTable.addColumn({type: 'string', role: 'tooltip'});
-
-       var rowData;
-
-       for (const x of data)
-       {
-         if(x.URL != 'URL')
-         {
-           var duration = convertTime(x.duration, 0);
-           var date = new Date(x.timeStart)
-           rowData = [date, duration, 'Date: ' + date +'\nDuration: ' + duration + ' minutes'];
-           dataTable.addRow(rowData);
-         }
-
-       }
-
-       var options = {
-         title: 'Total Emails Received Throughout the Day',
-         height: 450,
-         bar: {groupWidth: '100%'}
-       };
-
-      var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
-
-       chart.draw(dataTable, google.charts.Bar.convertOptions(options));
-     }
-};
-
-//makes the chart for the day arguments[1] has event data
-function makeDayChart(data)
-{
-    mainTitle = nameTitle(data[0].URL);
-    google.charts.load('current', {'packages':['corechart', 'bar']});
-       google.charts.setOnLoadCallback(drawChart);
-
-       function drawChart() {
-
-         var dataTable = new google.visualization.DataTable();
-         dataTable.addColumn('string', 'Time of Day');
-         dataTable.addColumn('number', 'Duration');
-         dataTable.addColumn({type: 'string', role: 'tooltip'});
-
-         var rowData;
-         var morning = 0;
-         var afternoon = 0;
-         var evening = 0;
-         for (const x of data)
-         {
-           if(x.URL != 'URL')
-           {
-             var duration = convertTime(x.duration, 1);
-             var date = new Date(x.timeStart);
-             var timeOfDay = findTimeOfDay(date);
-             switch (timeOfDay)
-             {
-               case 0: morning += duration;
-               // console.log(morning);
-               break;
-               case 1: afternoon += duration;
-               // console.log(afternoon);
-               break;
-               case 2: evening += duration;
-               // console.log(evening);
-               break;
-               default: console.log('error');
-             }
-           }
-         }
-         morning = Math.floor((morning + 30) / 60);
-         afternoon = Math.floor((afternoon + 30) / 60);
-         evening = Math.floor((evening + 30) / 60);
-         // console.log(evening);
-         dataTable.addRows([
-           ['Morning', morning, 'Morning\n Duration: ' + morning + ' minutes'],
-           ['Afternoon', afternoon, 'Afternoon\n Duration: ' + afternoon + ' minutes'],
-           ['Evening', evening, 'Evening\n Duration: ' + evening + ' minutes']
-         ]);
-
-         var options = {
-           title: mainTitle,
-           height: 450,
-           bar: {groupWidth: '100%'}
-         };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
-
-         chart.draw(dataTable, google.charts.Bar.convertOptions(options));
-       }
-};
-
-//makes the chart for the week argument[1] has events
-function makeWeekChart(data)
-{
-    mainTitle = nameTitle(data[0].URL);
-    google.charts.load('current', {'packages':['corechart', 'bar']});
-       google.charts.setOnLoadCallback(drawChart);
-
-       function drawChart() {
-
-         var dataTable = new google.visualization.DataTable();
-         dataTable.addColumn('string', 'Day of Week');
-         dataTable.addColumn('number', 'Duration');
-         dataTable.addColumn({type: 'string', role: 'tooltip'});
-
-         var rowData;
-         var week = [0,0,0,0,0,0,0];
-         for (const x of data)
-         {
-           if(x.URL != 'URL')
-           {
-             var duration = convertTime(x.duration, 1);
-             var date = new Date(x.timeStart);
-             var timeOfDay = findDayOfWeek(date);
-             week[timeOfDay] += duration;
-           }
-           else {
-             console.log(x.URL);
-           }
-         }
-
-        for (let i = 0; i < week.length; i++)
-        {
-          week[i] = Math.floor((week[i] + 30) / 60);
-        }
-         dataTable.addRows([
-           ['Sunday', week[0], 'Sunday\n Duration: ' + week[0] + ' minutes'],
-           ['Monday', week[1], 'Monday\n Duration: ' + week[1] + ' minutes'],
-           ['Tuesday', week[2], 'Tuesday\n Duration: ' + week[2] + ' minutes'],
-           ['Wednesday', week[3], 'Wednesday\n Duration: ' + week[3] + ' minutes'],
-           ['Thursday', week[4], 'Thursday\n Duration: ' + week[4] + ' minutes'],
-           ['Friday', week[5], 'Friday\n Duration: ' + week[5] + ' minutes'],
-           ['Saturday', week[6], 'Saturday\n Duration: ' + week[6] + ' minutes']
-         ]);
-
-         var options = {
-           title: mainTitle,
-           height: 450,
-           bar: {groupWidth: '100%'}
-         };
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('timeline'));
-
-         chart.draw(dataTable, google.charts.Bar.convertOptions(options));
-
-     };
 };
 
 //timeUnit 0 = minutes, 1 = seconds
