@@ -104,12 +104,29 @@
           <input id="dateButton" type="submit">
         </div>
 
-              <div id="timeline" class="graph" style="height: 500px; width: auto;"></div>
-              <div id="showSitesHeader"></div>
-              <button id="sortTimeButton">Sort Sites by Time</button>
-              <button id="sortNameButton">Sort Sites by Name</button>
-              <div id="timeStart"></div>
-              <div id="duration"></div>
+
+
+        <div id="timeline" class="graph" style="height: 300px; width: auto;"></div>
+        <form class="form-inline">
+            <label>Add Events</label>
+            <label for="from">From:</label>
+            <input type="date" class="form-control from" id="exampleFormControlInput1" >
+            <input type="time" class="form-control from" id="exampleFormControlInput1" >
+            <label for="to">To:</label>
+            <input type="date" class="form-control to" id="exampleFormControlInput1" >
+            <input type="time" class="form-control to" id="exampleFormControlInput2" >
+            <button type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
+        </form>
+        <form class="form-inline">
+            <label>Delete Events</label>
+            <label for="from">From:</label>
+            <input type="date" class="form-control from" id="exampleFormControlInput1" >
+            <input type="time" class="form-control from" id="exampleFormControlInput1" >
+            <label for="to">To:</label>
+            <input type="date" class="form-control to" id="exampleFormControlInput1" >
+            <input type="time" class="form-control to" id="exampleFormControlInput2" >
+            <button type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
+        </form>
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
