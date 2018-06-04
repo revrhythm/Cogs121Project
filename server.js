@@ -1,10 +1,16 @@
+/*
+  This file accesses the backend using app.get
+  The tables are named by their date and one table contains
+  all the rows from the dates. We have also have the
+  ability to add and delete events that exist in our web_data.db database
+*/
 const express = require('express');
 const app = express();
 
 //using this library to interface with SQLite db https://github.com/mapbox/node-sqlite3
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('web_data.db');//web data database
-const db2 = new sqlite3.Database('events.db');
+// const db2 = new sqlite3.Database('events.db');
 
 app.use(express.static('static_files'));
 
@@ -131,39 +137,39 @@ app.get('/data/all', (req, res) =>{
   );
 });
 
-app.get('/data/events', (req, res) =>
-{
-  db2.all(
-    'SELECT * FROM events',
-    (err, rows) =>
-    {
-      if (rows.length > 0) {
-        res.send(rows);
-      } else {
-        res.send({});
-      }
-    }
-  );
-});
-
-app.get('/data/events/:event', (req, res) =>
-{
-  const eventLookup = req.params.event;
-  db2.all(
-    'SELECT * FROM events WHERE EVENT=$EVENT',
-    {
-      $EVENT: eventLookup
-    },
-    (err, rows) =>
-    {
-      if (rows.length > 0) {
-        res.send(rows);
-      } else {
-        res.send({});
-      }
-    }
-  );
-});
+// app.get('/data/events', (req, res) =>
+// {
+//   db2.all(
+//     'SELECT * FROM events',
+//     (err, rows) =>
+//     {
+//       if (rows.length > 0) {
+//         res.send(rows);
+//       } else {
+//         res.send({});
+//       }
+//     }
+//   );
+// });
+//
+// app.get('/data/events/:event', (req, res) =>
+// {
+//   const eventLookup = req.params.event;
+//   db2.all(
+//     'SELECT * FROM events WHERE EVENT=$EVENT',
+//     {
+//       $EVENT: eventLookup
+//     },
+//     (err, rows) =>
+//     {
+//       if (rows.length > 0) {
+//         res.send(rows);
+//       } else {
+//         res.send({});
+//       }
+//     }
+//   );
+// });
 
 // start the server at URL: http://localhost:3000/
 app.listen(3000, () => {
