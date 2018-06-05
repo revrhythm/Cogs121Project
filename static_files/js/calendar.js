@@ -11,7 +11,7 @@ $(document).ready(() => {
     $.ajax({
       // all URLs are relative to http://localhost:3000/
       url: '../data/date/' + formatDate($('#addFromDate').val()),
-      type: 'POST', // <-- this is POST, not GET
+      type: 'POST',
       data: {
               ID: 600,
               URL: 'Event',
@@ -22,6 +22,26 @@ $(document).ready(() => {
             },
       success: (data) => {
         $('#status').html(data.message);
+      }
+    });
+  });
+
+  $('#deleteButton').click(() => {
+    $.ajax({
+      // all URLs are relative to http://localhost:3000/
+      url: '../data/date/' + formatDate($('#deleteFromDate').val()),
+      type: 'DELETE',
+      data: {
+              ID: 600,
+              URL: 'Event',
+              //NOTE: need to fix formatting to match others, still enters data base fine
+              timeStart: $('#deleteFromDate').val() + ' ' + $('#deleteFromTime').val(),
+              timeEnd: $('#deleteToDate').val() + ' ' + $('#deleteToTime').val(),
+              duration: $('#deleteEventName').val()
+            },
+      success: (data) => {
+        $('#status').html(data.message);
+        console.log('hi, it worked maybe');
       }
     });
   });
