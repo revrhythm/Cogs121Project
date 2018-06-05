@@ -137,6 +137,34 @@ app.get('/data/all', (req, res) =>{
   );
 });
 
+// POST a new event to a specific day
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
+app.post('/data/date/:dateURL/', (req, res) => {
+  console.log(req.body);
+  const urlDate = req.params.dateURL;
+
+  db.run(
+    'INSERT INTO ' + urlDate.toString() + ' VALUES ($ID, $URL, $timeStart, $timeEnd, $duration)',
+    // parameters to SQL query:
+    {
+      $ID: req.body.ID,
+      $URL: req.body.URL,
+      $timeStart: req.body.timeStart,
+      $timeEnd: req.body.timeEnd,
+      $duration: req.body.duration,
+    },
+    // callback function to run when the query finishes:
+    (err) => {
+      if (err) {
+        res.send({message: 'error in app.post'});
+      } else {
+        res.send({message: 'successfully run app.post'});
+      }
+    }
+  );
+});
+
 // app.get('/data/events', (req, res) =>
 // {
 //   db2.all(
