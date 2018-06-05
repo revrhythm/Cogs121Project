@@ -17,6 +17,7 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/home.js"></script>
@@ -107,7 +108,12 @@
 
 
         <div id="timeline" class="graph" style="height: 300px; width: auto;"></div>
-        <h4>Add Events</h4>
+        <h4>Add Events 
+          <button class="btn" type="button" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
+              <i class="fas fa-chevron-down"></i>
+          </button>
+        </h4>
+        <div class="collapse" id="collapseAdd">
         <form class="form-inline" style="margin-bottom: 20px;">
             Event Name: <input id="addEventName" type="text" size="10"/>
             <label for="from">From:</label>
@@ -118,18 +124,46 @@
             <input type="time" class="form-control to" id="addToTime" >
             <button id ="addButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
         </form>
-        <!--note, don't think we should have this feature if implemented like this
-        <h4>Delete Events</h4>
-          <form class="form-inline" style="margin-bottom: 20px;">
-            Event Name: <input id="deleteEventName" type="text" size="10"/>
-            <label for="from">From:</label>
-            <input type="date" class="form-control from" id="deleteFromDate" >
-            <input type="time" class="form-control from" id="deleteFromTime" >
-            <label for="to">To:</label>
-            <input type="date" class="form-control to" id="deleteToDate" >
-            <input type="time" class="form-control to" id="deleteToTime" >
-            <button id="deleteButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
-        </form>-->
+        </div>
+        <!--NOTE, don't think we should have this feature if implemented like this. Not user-friendly-->
+        <h4>Delete Events 
+            <button class="btn" type="button" data-toggle="collapse" data-target="#collapseDelete" aria-expanded="false" aria-controls="collapseDelete">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+          </h4>
+          <div class="collapse" id="collapseDelete">
+            <form class="form-inline" style="margin-bottom: 20px;">
+                Event Name: <input id="deleteEventName" type="text" size="10"/>
+                <label for="from">From:</label>
+                <input type="date" class="form-control from" id="deleteFromDate" >
+                <input type="time" class="form-control from" id="deleteFromTime" >
+                <label for="to">To:</label>
+                <input type="date" class="form-control to" id="deleteToDate" >
+                <input type="time" class="form-control to" id="deleteToTime" >
+                <button id="deleteButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
+            </form>
+          </div>
+
+        <!--Attempt to have deleting make sense for the user
+        <h4>Delete Events 
+            <button class="btn" type="button" data-toggle="collapse" data-target="#collapseDelete" aria-expanded="false" aria-controls="collapseDelete">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+          </h4>
+          <div class="collapse" id="collapseDelete">
+            <!--Instead of a form class with user input, hopefully this will list the events with an option to delete next to each event
+            <div style="margin-bottom: 20px;">
+              <h6>What day would you like to delete an event from?</h2>
+              <div id="calendar2">
+                  Enter Date:
+                  <input id="dateBox2" type="date" value="2018-04-21">
+                  <input id="dateButton2" type="submit">
+              </div>
+              <div id="deleteEventsFrom"></div>
+              <div id="deleteEventsButtonList"></div>
+              <button id="deleteButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
+            </div>
+          </div>-->
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
