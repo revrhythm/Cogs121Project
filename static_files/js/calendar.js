@@ -7,7 +7,24 @@
   example: (300,'Event', '4/23/2018 11:00:00 AM', '4/23/2018 2:00:00 PM', 'Homework')
 */
 $(document).ready(() => {
-
+  $('#addButton').click(() => {
+    $.ajax({
+      // all URLs are relative to http://localhost:3000/
+      url: '../data/date/' + formatDate($('#addFromDate').val()),
+      type: 'POST', // <-- this is POST, not GET
+      data: {
+              ID: 600,
+              URL: 'Event',
+              //NOTE: need to fix formatting to match others, still enters data base fine
+              timeStart: $('#addFromDate').val() + ' ' + $('#addFromTime').val(),
+              timeEnd: $('#addToDate').val() + ' ' + $('#addToTime').val(),
+              duration: $('#addEventName').val()
+            },
+      success: (data) => {
+        $('#status').html(data.message);
+      }
+    });
+  });
 });
 
 

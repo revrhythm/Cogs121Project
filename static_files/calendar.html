@@ -109,24 +109,27 @@
         <div id="timeline" class="graph" style="height: 300px; width: auto;"></div>
         <h4>Add Events</h4>
         <form class="form-inline" style="margin-bottom: 20px;">
+            Event Name: <input id="addEventName" type="text" size="10"/>
             <label for="from">From:</label>
-            <input type="date" class="form-control from" id="exampleFormControlInput1" >
-            <input type="time" class="form-control from" id="exampleFormControlInput1" >
+            <input type="date" class="form-control from" id="addFromDate" >
+            <input type="time" class="form-control from" id="addFromTime" >
             <label for="to">To:</label>
-            <input type="date" class="form-control to" id="exampleFormControlInput1" >
-            <input type="time" class="form-control to" id="exampleFormControlInput2" >
-            <button type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
+            <input type="date" class="form-control to" id="addToDate" >
+            <input type="time" class="form-control to" id="addToTime" >
+            <button id ="addButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
         </form>
+        <!--note, don't think we should have this feature if implemented like this
         <h4>Delete Events</h4>
-        <form class="form-inline" style="margin-bottom: 20px;">
+          <form class="form-inline" style="margin-bottom: 20px;">
+            Event Name: <input id="deleteEventName" type="text" size="10"/>
             <label for="from">From:</label>
-            <input type="date" class="form-control from" id="exampleFormControlInput1" >
-            <input type="time" class="form-control from" id="exampleFormControlInput1" >
+            <input type="date" class="form-control from" id="deleteFromDate" >
+            <input type="time" class="form-control from" id="deleteFromTime" >
             <label for="to">To:</label>
-            <input type="date" class="form-control to" id="exampleFormControlInput1" >
-            <input type="time" class="form-control to" id="exampleFormControlInput2" >
-            <button type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
-        </form>
+            <input type="date" class="form-control to" id="deleteToDate" >
+            <input type="time" class="form-control to" id="deleteToTime" >
+            <button id="deleteButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Delete</button>
+        </form>-->
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
