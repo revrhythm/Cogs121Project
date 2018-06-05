@@ -165,16 +165,19 @@ app.post('/data/date/:dateURL/', (req, res) => {
   );
 });
 
-// DELETE a specified event
-app.delete('/data/date/:dateURL/', (req, res) => {
+// DELETE a specified event only based on only date/eventname
+// doesn't account for duplicate events
+app.delete('/data/date/:dateURL/:event/', (req, res) => {
   console.log(req.body);
+  const urlDeleteEvent = req.params.dateURL + '/' + req.params.event;
   const urlDate = req.params.dateURL;
-  const bodyURL = req.body.URL;
-  const bodyTimeStart = req.body.timeStart;
-  const bodyEventName = req.body.duration;
+  const deleteEvent = req.params.event;
 
   db.run(
-    'DELETE FROM ' + urlDate.toString() + ' WHERE URL =' + bodyURL + ' AND timeStart =' + bodyTimeStart + ' AND duration =' + bodyEventName,
+    'DELETE FROM ' + urlDate.toString() + ' WHERE duration=$duration',
+    {
+      $duration: deleteEvent
+    },
     (err) => {
       if (err) {
         res.send({message: 'error in app.DELETE'});
@@ -185,6 +188,27 @@ app.delete('/data/date/:dateURL/', (req, res) => {
   );
   console.log('shit happened');
 });
+
+// DELETE a specified event with more parameters. also doesn't work lol
+//app.delete('/data/date/:dateURL/', (req, res) => {
+  //console.log(req.body);
+  //const urlDate = req.params.dateURL;
+  //const bodyURL = req.body.URL;
+  //const bodyTimeStart = req.body.timeStart;
+  //const bodyEventName = req.body.duration;
+
+  //db.run(
+    //'DELETE FROM ' + urlDate.toString() + ' WHERE URL =' + bodyURL + ' AND timeStart =' + bodyTimeStart + ' AND duration =' + bodyEventName,
+    //(err) => {
+      //if (err) {
+        //res.send({message: 'error in app.DELETE'});
+      //} else {
+        //res.send({message: 'successfully run app.DELETE'});
+      //}
+    //}
+  //);
+  //console.log('shit happened');
+//});
 
 // app.get('/data/events', (req, res) =>
 // {
