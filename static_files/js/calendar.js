@@ -29,6 +29,18 @@ $(document).ready(() => {
   $('#deleteButton').click(() => {
     $.ajax({
       // all URLs are relative to http://localhost:3000/
+      url: '../data/date/' + formatDate($('#deleteFromDate').val()) + '/' + $('#deleteEventName').val() ,
+      type: 'DELETE',
+      success: (data) => {
+        $('#status').html(data.message);
+        console.log('hi, it worked maybe');
+      }
+    });
+  });
+
+  /*$('#deleteButton').click(() => {
+    $.ajax({
+      // all URLs are relative to http://localhost:3000/
       url: '../data/date/' + formatDate($('#deleteFromDate').val()),
       type: 'DELETE',
       data: {
@@ -44,7 +56,7 @@ $(document).ready(() => {
         console.log('hi, it worked maybe');
       }
     });
-  });
+  });*/
 });
 
 
