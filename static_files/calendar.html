@@ -17,12 +17,13 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/home.js"></script>
   <script src="js/data.js"></script>
-    <script src="js/calendar.js"></script>
+  <script src="js/calendar.js"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -108,32 +109,33 @@
 
 
         <div id="timeline" class="graph" style="height: 300px; width: auto;"></div>
-        <h4>Add Events 
-          <button class="btn" type="button" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
-              <i class="fas fa-chevron-down"></i>
+        <h4>Add Events
+            <button class="btn" type="button" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
+                <i class="fa fa-angle-down"></i>
+
           </button>
         </h4>
         <div class="collapse" id="collapseAdd">
-        <form class="form-inline" style="margin-bottom: 20px;">
-            Event Name: <input id="addEventName" type="text" size="10"/>
-            <label for="from">From:</label>
-            <input type="date" class="form-control from" id="addFromDate" >
-            <input type="time" class="form-control from" id="addFromTime" >
-            <label for="to">To:</label>
-            <input type="date" class="form-control to" id="addToDate" >
-            <input type="time" class="form-control to" id="addToTime" >
-            <button id ="addButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
-        </form>
+            <form class="form-inline" style="margin-bottom: 20px;">
+                Event Name: <input class="form-control form" id="addEventName" type="text" size="10"/>
+                <label for="from">From:</label>
+                <input type="date" class="form-control from" id="addFromDate" >
+                <input type="time" class="form-control from" id="addFromTime" >
+                <label for="to">To:</label>
+                <input type="date" class="form-control to" id="addToDate" >
+                <input type="time" class="form-control to" id="addToTime" >
+                <button id ="addButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
+            </form>
         </div>
         <!--NOTE, don't think we should have this feature if implemented like this. Not user-friendly-->
-        <h4>Delete Events 
+        <h4>Delete Events
             <button class="btn" type="button" data-toggle="collapse" data-target="#collapseDelete" aria-expanded="false" aria-controls="collapseDelete">
-                <i class="fas fa-chevron-down"></i>
+                <i class="fa fa-angle-down"></i>
             </button>
-          </h4>
-          <div class="collapse" id="collapseDelete">
+        </h4>
+        <div class="collapse" id="collapseDelete">
             <form class="form-inline" style="margin-bottom: 20px;">
-                Event Name: <input id="deleteEventName" type="text" size="10"/>
+                Event Name: <input class="form-control form" id="deleteEventName" type="text" size="10"/>
                 <label for="from">From:</label>
                 <input type="date" class="form-control from" id="deleteFromDate" >
                 <input type="time" class="form-control from" id="deleteFromTime" >
@@ -145,7 +147,7 @@
           </div>
 
         <!--Attempt to have deleting make sense for the user
-        <h4>Delete Events 
+        <h4>Delete Events
             <button class="btn" type="button" data-toggle="collapse" data-target="#collapseDelete" aria-expanded="false" aria-controls="collapseDelete">
                 <i class="fas fa-chevron-down"></i>
             </button>
