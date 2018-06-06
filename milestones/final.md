@@ -43,12 +43,6 @@ static_files/search.html
 static_files/css/login.css
 * Stylesheet for login page
 
-static_files/css/sb-admin.css
-* Stylesheet for sidebar
-
-static_files/css/sb-admin.min.css
-
-
 static_files/js/calendar.js
 * Makes ajax calls to backend to add and delete events
 
@@ -58,24 +52,6 @@ static_files/js/data.js
 
 static_files/js/home.js
 * Makes ajax calls to backend to send necessary data to data.js
-
-static_files/js/sb-admin-charts.js
-* Sets font of charts to match bootstrap's default styling
-
-static_files/js/sb-admin-charts.min.js
-* 
-
-static_files/js/sb-admin-datatables.js
-* Calls dataTables jQuery plugin
-
-static_files/js/sb-admin-datatables.min.js
-*
-
-static_files/js/sb-admin.js
-* Makes the sidebar work as it should
-
-static_files/js/sb-admin.min.js
-*
 
 static_files/js/search.js
 * Makes an ajax call to the database for data that the user is requesting via search
