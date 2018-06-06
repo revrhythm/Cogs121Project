@@ -1,10 +1,15 @@
 /*
-  This is where we'll add the add and delete
-  events funtionality
-  The event objects will be placed into a date table [MM_DD_YYYY]
-  with the following format (ID(number),'Event', '4/23/2018 11:00:00 AM'(startTime), '4/23/2018 2:00:00 PM'(endTime), 'EventName'(eventString))
-  the second variable ('Event') is the same for all events. EventName is where we name the events
-  example: (300,'Event', '4/23/2018 11:00:00 AM', '4/23/2018 2:00:00 PM', 'Homework')
+  This file makes ajax calls to the backend in the form of two main
+  functionalities: adding an element to our database and deleting
+  an element from our database.
+
+  The adding element functionality centers around a POST that goes
+  to the specified table by date and inputs the user inputted 
+  event information.
+
+  The deleting element functionality uses DELETE to go to the
+  user inputted date and takes note of the relevant input needed
+  to find the correctt event to delete in the database.
 */
 $(document).ready(() => {
   $('#addButton').click(() => {

@@ -1,5 +1,6 @@
 /*
   This file accesses the backend using app.get
+  and app.post and app.delete.
   The tables are named by their date and one table contains
   all the rows from the dates. We have also have the
   ability to add and delete events that exist in our web_data.db database
