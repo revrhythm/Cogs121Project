@@ -17,26 +17,6 @@ app.use(express.static('static_files'));
 
 const tableDates =
     '[04_21_2018],[04_22_2018],[04_23_2018],[04_24_2018],[04_25_2018],[04_26_2018],[04_27_2018]';
-/*deprecated database
-const fakeDatabase = {
-  'john': {socialMedia: 300, onlineTV: 100, education: 40, other: 120},
-  'jenny': {socialMedia: 200, onlineTV: 200, education: 20, other: 140},
-  //'Chocolate': {job: 'student',   pet: 'dog.jpg'},
-  //'Carol': {job: 'engineer',  pet: 'bear.jpg'}
-};
-*/
-
-// DEPRECATED - need to add a second database to be associated with
-// a second user in order to look up by username
-// GET a list of all usernames
-//
-// To test, open this URL in your browser:
-//   http://localhost:3000/users
-app.get('/users', (req, res) => {
-  const allUsernames = Object.keys(fakeDatabase); // returns a list of object keys
-  console.log('allUsernames is:', allUsernames);
-  res.send(allUsernames);
-});
 
 
 // Needs modification to fit the new db
@@ -164,7 +144,36 @@ app.post('/data/date/:dateURL/', (req, res) => {
       }
     }
   );
+  console.log('Event, "' + req.body.duration +'", added to the database');
 });
+
+// DELETE a specified event by both event name and event start time
+// to prevent deletion of events with same name.
+app.delete('/data/date/:dateURL/', (req, res) => {
+  console.log(req.body);
+  const urlDate = req.params.dateURL;
+  const deleteEvent = req.body.duration;
+  const deleteTimeStart = req.body.timeStart;
+
+  db.run(
+    'DELETE FROM ' + urlDate.toString() + ' WHERE duration=$duration AND timeStart=$dTimeStart',
+    {
+      $duration: deleteEvent,
+      $dTimeStart: deleteTimeStart
+    },
+    (err) => {
+      if (err) {
+        res.send({message: 'error in app.DELETE'});
+      } else {
+        res.send({message: 'successfully run app.DELETE'});
+      }
+    }
+  );
+  console.log('Event, "' + deleteEvent +'", deleted from the database');
+});
+
+
+/* NOTE BELOW HERE - code still in testing for possible future iterations */
 
 // DELETE a specified event only based on only date/event name
 // doesn't account for duplicate events
@@ -189,31 +198,6 @@ app.post('/data/date/:dateURL/', (req, res) => {
   );
   console.log('welp happened');
 });*/
-
-// DELETE a specified event by both event name and event start time
-// to prevent deletion of events with same name.
-app.delete('/data/date/:dateURL/', (req, res) => {
-  console.log(req.body);
-  const urlDate = req.params.dateURL;
-  const deleteEvent = req.body.duration;
-  const deleteTimeStart = req.body.timeStart;
-
-  db.run(
-    'DELETE FROM ' + urlDate.toString() + ' WHERE duration=$duration AND timeStart=$dTimeStart',
-    {
-      $duration: deleteEvent,
-      $dTimeStart: deleteTimeStart
-    },
-    (err) => {
-      if (err) {
-        res.send({message: 'error in app.DELETE'});
-      } else {
-        res.send({message: 'successfully run app.DELETE'});
-      }
-    }
-  );
-  console.log('shtuff happened');
-});
 
 // app.get('/data/events', (req, res) =>
 // {

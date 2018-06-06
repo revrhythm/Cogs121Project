@@ -1,7 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--This file displays the calendar section of BYoDs 
-It displays-->
+<!--This file holds the calendar section of our application.
+As opposed to the home page which is mainly for checking usage
+of the day in a brief glance, calendar is where the user goes to
+look at any day an see all usage as well as having the key functionality
+of:
+    - adding custom events:
+          Adding custom events is by an Ajax post stored in calendar.js
+          which requires the input of an event name, start date/time,
+          end date/time. After which clicking the add button adds it
+          to the database.
+
+    - deleting custom events: 
+          Deleting made custom events is through the Ajax delete in
+          calendar.js which also has the areas for event name, start
+          date/time and end date/time. It requires at least input
+          of event name and start time to ensure events with the same
+          name do not get confused.
+-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -90,7 +106,8 @@ It displays-->
               <a class="nav-link" id="top10Button" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Top 10</a>
           </li> -->
       </ul>
-      <!-- Icon Cards-->
+
+      <!-- Display the specified day's timeline-->
       <div id=dailyTimeline>
           <h1>Daily Timeline</h1>
       </div>
@@ -107,9 +124,8 @@ It displays-->
           <input id="dateButton" type="submit">
         </div>
 
-
-
         <div id="timeline" class="graph" style="height: 300px; width: auto;"></div>
+        
         <!--Add event functionality-->
         <h4>Add Events
             <button class="btn" type="button" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
@@ -129,6 +145,7 @@ It displays-->
                 <button id ="addButton" type="submit" class="btn btn-primary" style="margin: 10px 10px 10px 10px">Add</button>
             </form>
         </div>
+
         <!--Delete Event Functionality-->
         <h4>Delete Events
             <button class="btn" type="button" data-toggle="collapse" data-target="#collapseDelete" aria-expanded="false" aria-controls="collapseDelete">
@@ -195,7 +212,7 @@ It displays-->
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" href="index.html">Logout</a>
           </div>
         </div>
       </div>
