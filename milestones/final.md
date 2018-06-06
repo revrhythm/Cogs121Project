@@ -1,15 +1,24 @@
 ### Team Members
 Brittany Butler
-*
+* Web Page Design
+* Back End Developement
+* Data Visualization
 
 Youxi Li
-*
+* Web Page Design
+* UI UX Design
+* Front End Developement
+* Data Visualization
 
 Sophie Liu
-* Design and milestone write-ups
+* Design 
+* Milestone write-ups
 
 Daniel Martin
-*
+* Web Page Design
+* Back End Developemnent
+* Database
+* Data Visualization
 
 ### Source Code Files
 static_files/calendar.html
