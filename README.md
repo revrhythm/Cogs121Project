@@ -6,7 +6,7 @@ will track used websites. hopefully.
 
 1) start the server, node server.js
 
-2) Open frontpage at: http://localhost:3000/login.html
+2) Open frontpage at: http://localhost:3000/index.html
 
 3) As of current iterations, username and password do not matter. Submit anything.
 
